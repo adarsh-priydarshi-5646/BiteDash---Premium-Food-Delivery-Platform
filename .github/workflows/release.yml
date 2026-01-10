@@ -87,6 +87,7 @@ jobs:
             exit 1
           fi
           echo "✅ Build verified"
+          ls -la dist/
 
       - name: Upload build
         uses: actions/upload-artifact@v4
@@ -101,6 +102,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
       - name: Download build
         uses: actions/download-artifact@v4
         with:
@@ -110,9 +116,16 @@ jobs:
       - name: Install Vercel CLI
         run: npm install -g vercel@latest
 
-      - name: Pull Vercel Environment
+      - name: Create Vercel project config
         working-directory: frontend
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        run: |
+          mkdir -p .vercel
+          echo '{"orgId":"${{ secrets.VERCEL_ORG_ID }}","projectId":"${{ secrets.VERCEL_PROJECT_ID }}"}' > .vercel/project.json
+          cat .vercel/project.json
+
+      - name: Build with Vercel
+        working-directory: frontend
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
@@ -121,9 +134,10 @@ jobs:
         id: deploy
         working-directory: frontend
         run: |
-          URL=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
+          URL=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }} 2>&1)
+          echo "Deployment output: $URL"
           echo "url=$URL" >> $GITHUB_OUTPUT
-          echo "✅ Deployed to: $URL"
+          echo "✅ Deployment completed"
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
