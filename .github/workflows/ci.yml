@@ -40,7 +40,7 @@ jobs:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           VITE_STRIPE_PUBLIC_KEY: ${{ secrets.VITE_STRIPE_PUBLIC_KEY }}
 
-  backend:
+  backend-lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -54,22 +54,44 @@ jobs:
       - run: npm ci
         working-directory: backend
 
-      - name: Syntax check
+      - name: Syntax check all files
         run: |
           for file in $(find . -name "*.js" -not -path "./node_modules/*"); do
             node --check "$file"
           done
         working-directory: backend
 
+  backend-security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - run: npm ci
+        working-directory: backend
+
+      - name: Security audit
+        run: npm audit --audit-level=high || echo "::warning::Vulnerabilities found"
+        working-directory: backend
+
   status:
-    needs: [frontend, backend]
+    needs: [frontend, backend-lint, backend-security]
     runs-on: ubuntu-latest
     if: always()
     steps:
       - name: CI Status
         run: |
-          if [ "${{ needs.frontend.result }}" != "success" ] || [ "${{ needs.backend.result }}" != "success" ]; then
-            echo "❌ CI Failed"
+          if [ "${{ needs.frontend.result }}" != "success" ]; then
+            echo "❌ Frontend failed"
+            exit 1
+          fi
+          if [ "${{ needs.backend-lint.result }}" != "success" ]; then
+            echo "❌ Backend lint failed"
             exit 1
           fi
           echo "✅ CI Passed"
