@@ -22,7 +22,7 @@ env:
   NODE_VERSION: '20'
 
 jobs:
-  # Run full test suite before release - MUST pass
+  # Run full test suite before release
   test:
     runs-on: ubuntu-latest
     strategy:
@@ -53,7 +53,7 @@ jobs:
         working-directory: ${{ matrix.directory }}
         run: ${{ matrix.test-command }}
 
-  # Build frontend for production - MUST pass
+  # Build frontend for production
   build-frontend:
     needs: test
     runs-on: ubuntu-latest
@@ -84,15 +84,11 @@ jobs:
       - name: Verify build output
         working-directory: frontend
         run: |
-          if [ ! -d "dist" ]; then
-            echo "❌ Build failed - dist folder not found!"
+          if [ ! -d "dist" ] || [ ! -f "dist/index.html" ]; then
+            echo "❌ Build failed!"
             exit 1
           fi
-          if [ ! -f "dist/index.html" ]; then
-            echo "❌ Build failed - index.html not found!"
-            exit 1
-          fi
-          echo "✅ Build verified successfully"
+          echo "✅ Build verified"
 
       - name: Upload production build
         uses: actions/upload-artifact@v4
@@ -101,10 +97,11 @@ jobs:
           path: frontend/dist
           retention-days: 30
 
-  # Deploy frontend to Vercel
+  # Deploy frontend to Vercel (skip if secrets not configured)
   deploy-frontend:
     needs: build-frontend
     runs-on: ubuntu-latest
+    if: ${{ secrets.VERCEL_TOKEN != '' }}
     environment:
       name: ${{ github.event.inputs.environment || 'production' }}
       url: ${{ steps.deploy.outputs.url }}
@@ -128,15 +125,27 @@ jobs:
           working-directory: ./frontend
           scope: ${{ secrets.VERCEL_ORG_ID }}
 
-      - name: Verify deployment
-        if: steps.deploy.outputs.url
+      - name: Deployment status
         run: |
-          echo "Deployment URL: ${{ steps.deploy.outputs.url }}"
-          echo "✅ Deployment successful!"
+          echo "✅ Deployed to: ${{ steps.deploy.outputs.url }}"
 
-  # Create GitHub release on successful deploy
+  # Skip deploy notification if secrets not set
+  deploy-skip-notice:
+    needs: build-frontend
+    runs-on: ubuntu-latest
+    if: ${{ secrets.VERCEL_TOKEN == '' }}
+    steps:
+      - name: Deployment skipped
+        run: |
+          echo "⚠️ Vercel deployment skipped - VERCEL_TOKEN not configured"
+          echo "To enable deployment, add these secrets to your repository:"
+          echo "  - VERCEL_TOKEN"
+          echo "  - VERCEL_ORG_ID"
+          echo "  - VERCEL_PROJECT_ID"
+
+  # Create GitHub release
   create-release:
-    needs: [deploy-frontend]
+    needs: [build-frontend]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
@@ -144,63 +153,54 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get version from package.json
+      - name: Get version
         id: version
         run: |
           VERSION=$(node -p "require('./frontend/package.json').version")
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-
-      - name: Generate changelog
-        id: changelog
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const { data: commits } = await github.rest.repos.listCommits({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              per_page: 20
-            });
-            
-            const changelog = commits
-              .slice(0, 10)
-              .map(c => `- ${c.commit.message.split('\n')[0]} (${c.sha.substring(0, 7)})`)
-              .join('\n');
-            
-            return changelog;
-          result-encoding: string
 
       - name: Create Release
         uses: actions/github-script@v7
         with:
           script: |
             const date = new Date().toISOString().split('T')[0];
-            const tagName = `v${{ steps.version.outputs.version }}-${date}`;
+            const tagName = `v${{ steps.version.outputs.version }}-${date}-${context.sha.substring(0, 7)}`;
             
             try {
+              const { data: commits } = await github.rest.repos.listCommits({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                per_page: 10
+              });
+              
+              const changelog = commits
+                .map(c => `- ${c.commit.message.split('\n')[0]}`)
+                .join('\n');
+              
               await github.rest.repos.createRelease({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 tag_name: tagName,
                 name: `Release ${tagName}`,
-                body: `## What's Changed\n\n${{ steps.changelog.outputs.result }}\n\n**Full Changelog**: https://github.com/${context.repo.owner}/${context.repo.repo}/commits/main`,
+                body: `## Changes\n\n${changelog}`,
                 draft: false,
                 prerelease: false
               });
+              console.log('✅ Release created:', tagName);
             } catch (error) {
-              console.log('Release may already exist:', error.message);
+              console.log('Release skipped:', error.message);
             }
 
-  # Final release status check
+  # Final status
   release-status:
-    needs: [test, build-frontend, deploy-frontend, create-release]
+    needs: [test, build-frontend, create-release]
     runs-on: ubuntu-latest
     if: always()
     steps:
-      - name: Check release status
+      - name: Release Status
         run: |
           echo "Test: ${{ needs.test.result }}"
           echo "Build: ${{ needs.build-frontend.result }}"
-          echo "Deploy: ${{ needs.deploy-frontend.result }}"
           echo "Release: ${{ needs.create-release.result }}"
           
           if [ "${{ needs.test.result }}" != "success" ]; then
