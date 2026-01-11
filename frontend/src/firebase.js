@@ -1,9 +1,9 @@
 /**
- * Firebase Configuration - BiteDash Google OAuth Setup
+ * Firebase Configuration - Google OAuth setup
  * 
- * Initializes Firebase app with environment variables for authentication
- * Exports auth instance for Google sign-in functionality
- * TODO: Create new Firebase project named "bitedash" to replace legacy config
+ * Initializes Firebase app with environment variables
+ * Exports auth instance for Google sign-in
+ * Note: Firebase project still uses "vingo" (requires new project to change)
  */
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
