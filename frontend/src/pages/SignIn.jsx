@@ -102,7 +102,6 @@ function SignIn() {
               placeholder="Email"
               onChange={(e) => setEmail(e.target.value)}
               value={email}
-              autoComplete="email"
               required
             />
           </div>
@@ -114,7 +113,6 @@ function SignIn() {
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
               value={password}
-              autoComplete="current-password"
               required
             />
             <button
