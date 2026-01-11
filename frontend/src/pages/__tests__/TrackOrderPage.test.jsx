@@ -1,3 +1,9 @@
+/**
+ * TrackOrderPage Tests - Real-time delivery tracking
+ * 
+ * Tests: Order status timeline, map display, delivery boy info
+ * Mocks: Axios for order data, Redux store, Socket.IO events
+ */
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import TrackOrderPage from '../TrackOrderPage';

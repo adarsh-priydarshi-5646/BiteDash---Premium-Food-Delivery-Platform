@@ -1,3 +1,9 @@
+/**
+ * OrderPlaced Page Tests - Order confirmation screen
+ * 
+ * Tests: Success message, order ID display, Stripe payment verification
+ * Mocks: Axios for payment verification, React Router navigation
+ */
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import OrderPlaced from '../OrderPlaced';

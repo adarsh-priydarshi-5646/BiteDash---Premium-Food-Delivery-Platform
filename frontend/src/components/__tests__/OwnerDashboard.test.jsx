@@ -1,3 +1,9 @@
+/**
+ * OwnerDashboard Component Tests - Restaurant owner panel
+ * 
+ * Tests: Menu items display, orders list, earnings stats, tab navigation
+ * Mocks: Redux store with shop data, Socket.IO events
+ */
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import OwnerDashboard from '../OwnerDashboard';

@@ -1,3 +1,9 @@
+/**
+ * userSlice Tests - Redux user state management
+ * 
+ * Tests: Initial state, setUserData, cart CRUD, orders, filters
+ * Covers: addToCart, removeCartItem, updateQuantity, clearCart, setMyOrders
+ */
 import { describe, it, expect } from 'vitest';
 import userReducer, { 
     setUserData, 

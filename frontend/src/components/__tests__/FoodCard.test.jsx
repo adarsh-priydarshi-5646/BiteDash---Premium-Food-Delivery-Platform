@@ -1,3 +1,9 @@
+/**
+ * FoodCard Component Tests - Food item display & cart functionality
+ * 
+ * Tests: Render item details, add to cart, quantity controls, remove item
+ * Mocks: Redux dispatch, useSelector for cart state
+ */
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import FoodCard from '../FoodCard';

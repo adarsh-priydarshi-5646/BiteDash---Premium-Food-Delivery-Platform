@@ -1,3 +1,9 @@
+/**
+ * LandingPage Tests - Public homepage for unauthenticated users
+ * 
+ * Tests: Hero section, city search, food collections, CTA buttons
+ * Mocks: Redux store, React Router navigation
+ */
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import LandingPage from '../LandingPage';

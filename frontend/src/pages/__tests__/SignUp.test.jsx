@@ -1,3 +1,9 @@
+/**
+ * SignUp Page Tests - User registration
+ * 
+ * Tests: Form validation, role selection, submit, Google OAuth
+ * Mocks: Axios for API, React Router navigation
+ */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import SignUp from '../SignUp';

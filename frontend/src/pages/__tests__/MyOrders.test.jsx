@@ -1,3 +1,9 @@
+/**
+ * MyOrders Page Tests - Order history display
+ * 
+ * Tests: Orders list, status badges, track/rate buttons, role-based view
+ * Mocks: Redux store with orders, Socket.IO events
+ */
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import MyOrders from '../MyOrders';

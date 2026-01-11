@@ -1,3 +1,9 @@
+/**
+ * AddItem Page Tests - Menu item creation form
+ * 
+ * Tests: Form rendering, validation, image upload, submit
+ * Mocks: Axios for API, Redux store for owner data
+ */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import AddItem from '../AddItem';

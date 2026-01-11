@@ -1,3 +1,9 @@
+/**
+ * CheckOut Page Tests - Order placement flow
+ * 
+ * Tests: Address selection, payment method, order submission
+ * Mocks: Axios for API, Redux store with cart & user data
+ */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import CheckOut from '../CheckOut';

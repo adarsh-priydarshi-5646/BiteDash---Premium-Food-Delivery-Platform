@@ -1,3 +1,9 @@
+/**
+ * Shop Page Tests - Restaurant detail & menu
+ * 
+ * Tests: Shop info display, menu items grid, add to cart
+ * Mocks: Axios for shop data, React Router params
+ */
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import Shop from '../Shop';

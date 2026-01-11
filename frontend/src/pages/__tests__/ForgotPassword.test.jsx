@@ -1,3 +1,9 @@
+/**
+ * ForgotPassword Page Tests - Password reset flow
+ * 
+ * Tests: Email input, OTP verification, new password submission
+ * Mocks: Axios for API calls, React Router navigation
+ */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import ForgotPassword from '../ForgotPassword';

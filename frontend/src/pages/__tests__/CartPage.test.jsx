@@ -1,3 +1,9 @@
+/**
+ * CartPage Tests - Shopping cart functionality
+ * 
+ * Tests: Cart items display, quantity controls, bill calculation, checkout
+ * Mocks: Redux store with cart items
+ */
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import CartPage from '../CartPage';

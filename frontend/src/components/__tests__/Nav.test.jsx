@@ -1,3 +1,9 @@
+/**
+ * Nav Component Tests - Navigation bar functionality
+ * 
+ * Tests: Search, cart badge, user menu, location display, mobile menu
+ * Mocks: Axios for search API, React Router navigation, Redux store
+ */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Nav from '../Nav';

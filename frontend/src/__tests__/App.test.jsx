@@ -1,3 +1,9 @@
+/**
+ * App Component Tests - Root component integration tests
+ * 
+ * Tests: Routing, auth state, loading states, role-based rendering
+ * Mocks: All custom hooks, Redux store, React Router
+ */
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import App from '../App';

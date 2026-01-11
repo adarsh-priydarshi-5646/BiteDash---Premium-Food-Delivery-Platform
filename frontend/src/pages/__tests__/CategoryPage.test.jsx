@@ -1,3 +1,9 @@
+/**
+ * CategoryPage Tests - Category filtered food items
+ * 
+ * Tests: Category header, items filtering, sort options
+ * Mocks: Redux store with items, React Router params
+ */
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import CategoryPage from '../CategoryPage';

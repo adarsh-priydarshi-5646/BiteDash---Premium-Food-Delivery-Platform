@@ -1,3 +1,13 @@
+# =============================================================================
+# PR Checks - Pull Request Validation & Auto-labeling
+# =============================================================================
+# 
+# Triggers: PR opened, synchronized, reopened, labeled
+# Features: Auto-labels (frontend/backend/docs/ci), lint, test, build
+# Auto-merge: Enabled for PRs with 'auto-merge' label or dependabot
+# Labels: Different colors for each type (React Blue, Node Green, etc.)
+# =============================================================================
+
 name: PR Checks
 
 on:

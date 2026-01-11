@@ -1,3 +1,9 @@
+/**
+ * CreateEditShop Page Tests - Restaurant profile setup
+ * 
+ * Tests: Form rendering, validation, image upload, create/update
+ * Mocks: Axios for API, Redux store for owner data
+ */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import CreateEditShop from '../CreateEditShop';

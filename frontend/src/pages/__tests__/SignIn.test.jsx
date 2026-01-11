@@ -1,3 +1,9 @@
+/**
+ * SignIn Page Tests - User authentication
+ * 
+ * Tests: Form validation, login submission, error handling, Google OAuth
+ * Mocks: Axios for API calls, React Router navigation
+ */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import SignIn from '../SignIn';

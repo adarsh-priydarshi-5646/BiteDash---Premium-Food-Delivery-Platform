@@ -1,3 +1,9 @@
+/**
+ * Home Page Tests - Role-based dashboard routing
+ * 
+ * Tests: User dashboard, Owner dashboard, DeliveryBoy dashboard rendering
+ * Mocks: Redux useSelector for user role detection
+ */
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import Home from '../Home';
