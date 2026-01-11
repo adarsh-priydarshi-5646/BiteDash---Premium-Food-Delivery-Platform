@@ -1,7 +1,13 @@
+/**
+ * In-Memory Cache with TTL Support
+ * Reduces database load for frequently accessed data
+ * For distributed systems, replace with Redis
+ */
 class Cache {
   constructor() {
     this.store = new Map();
     this.ttlStore = new Map();
+    // Auto-cleanup expired entries every 60s
     setInterval(() => this.cleanup(), 60 * 1000);
   }
 
@@ -56,6 +62,10 @@ class Cache {
 
 export const cache = new Cache();
 
+/**
+ * Express middleware for automatic response caching
+ * Only caches GET requests, intercepts res.json to store response
+ */
 export const cacheMiddleware = (ttlSeconds = 60) => {
   return (req, res, next) => {
     if (req.method !== 'GET') {
@@ -69,6 +79,7 @@ export const cacheMiddleware = (ttlSeconds = 60) => {
       return res.json(cached);
     }
 
+    // Intercept response to cache it
     const originalJson = res.json.bind(res);
     res.json = (data) => {
       cache.set(key, data, ttlSeconds);

@@ -1,6 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
+/**
+ * Cart Persistence Helpers
+ * Saves cart state to localStorage for persistence across sessions
+ */
 const saveCartToLocalStorage = (cartItems, totalAmount) => {
   try {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
@@ -135,6 +138,7 @@ const userSlice = createSlice({
       }
     },
 
+    // Real-time order status update from Socket.IO
     updateRealtimeOrderStatus: (state, action) => {
       const { orderId, shopId, status } = action.payload;
       const order = state.myOrders.find((o) => o._id == orderId);
@@ -156,7 +160,7 @@ const userSlice = createSlice({
       saveCartToLocalStorage([], 0);
     },
 
-    
+    // Filter state management for food discovery
     setSelectedCategories: (state, action) => {
       state.selectedCategories = action.payload;
     },

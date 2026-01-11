@@ -8,11 +8,17 @@ import {
 } from "../redux/userSlice";
 import { setAddress, setLocation } from "../redux/mapSlice";
 
+/**
+ * Geolocation Hook with Smart Fallbacks
+ * Priority: GPS -> Profile Address -> Cache -> Default City
+ * Handles permission states to avoid browser violations
+ */
 function useGetCity(auto = false) {
   const dispatch = useDispatch();
   const { currentCity, userData } = useSelector((state) => state.user);
   const apiKey = import.meta.env.VITE_GEOAPIKEY;
 
+  // Apply fallback data to Redux store
   const applyFallback = useCallback((fallbackData) => {
     if (fallbackData.city) dispatch(setCurrentCity(fallbackData.city));
     if (fallbackData.address) {

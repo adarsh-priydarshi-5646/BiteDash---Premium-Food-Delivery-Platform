@@ -32,14 +32,15 @@ const allowedOrigins = [
   process.env.FRONTEND_URL,
 ].filter(Boolean);
 
+// Socket.IO for real-time order tracking and notifications
 const io = new Server(server, {
   cors: {
     origin: allowedOrigins,
     credentials: true,
     methods: ["POST", "GET"],
   },
-  pingTimeout: 60000,
-  pingInterval: 25000,
+  pingTimeout: 60000,      // Disconnect if no pong in 60s
+  pingInterval: 25000,     // Heartbeat every 25s
   transports: ['websocket', 'polling'],
   allowUpgrades: true,
 });
@@ -118,6 +119,10 @@ server.listen(port, () => {
   console.log(`Server started on port ${port} | Mode: ${process.env.NODE_ENV || 'development'} | PID: ${process.pid}`);
 });
 
+/**
+ * Graceful Shutdown Handler
+ * Allows in-flight requests to complete before terminating
+ */
 const shutdown = async (signal) => {
   console.log(`\n${signal} received. Shutting down gracefully...`);
   
@@ -126,6 +131,7 @@ const shutdown = async (signal) => {
     process.exit(0);
   });
 
+  // Force exit after 10s if graceful shutdown fails
   setTimeout(() => {
     console.error('Forced shutdown after timeout');
     process.exit(1);

@@ -1,7 +1,12 @@
+/**
+ * Sliding Window Rate Limiter
+ * Prevents API abuse and ensures fair resource distribution
+ * Uses in-memory storage (use Redis for distributed deployments)
+ */
 class RateLimiter {
   constructor() {
     this.requests = new Map();
-    this.WINDOW_MS = 60 * 1000;
+    this.WINDOW_MS = 60 * 1000;  // 1 minute sliding window
     setInterval(() => this.cleanup(), 30 * 1000);
   }
 
@@ -18,6 +23,7 @@ class RateLimiter {
     const validTimestamps = timestamps.filter(t => t > windowStart);
     
     if (validTimestamps.length >= maxRequests) {
+      // Calculate when the oldest request will expire
       const oldestInWindow = Math.min(...validTimestamps);
       const retryAfter = Math.ceil((oldestInWindow + this.WINDOW_MS - now) / 1000);
       return { allowed: false, remaining: 0, retryAfter };
@@ -44,6 +50,7 @@ class RateLimiter {
 
 const limiter = new RateLimiter();
 
+// General API: 200 requests/minute per IP
 export const rateLimiter = (req, res, next) => {
   const ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   const result = limiter.isAllowed(`api:${ip}`, 200);
@@ -61,6 +68,7 @@ export const rateLimiter = (req, res, next) => {
   next();
 };
 
+// Auth endpoints: 20 requests/minute (prevents brute force)
 export const authRateLimiter = (req, res, next) => {
   const ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   const result = limiter.isAllowed(`auth:${ip}`, 20);
@@ -75,6 +83,7 @@ export const authRateLimiter = (req, res, next) => {
   next();
 };
 
+// Order placement: 30 requests/minute per user (prevents spam orders)
 export const orderRateLimiter = (req, res, next) => {
   const userId = req.userId || req.ip;
   const result = limiter.isAllowed(`order:${userId}`, 30);
@@ -89,6 +98,7 @@ export const orderRateLimiter = (req, res, next) => {
   next();
 };
 
+// Search: 60 requests/minute (allows fast typing with debounce)
 export const searchRateLimiter = (req, res, next) => {
   const ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   const result = limiter.isAllowed(`search:${ip}`, 60);
