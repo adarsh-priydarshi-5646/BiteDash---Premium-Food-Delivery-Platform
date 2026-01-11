@@ -1,12 +1,3 @@
-# =============================================================================
-# Release & Deploy - Production Deployment Pipeline
-# =============================================================================
-# 
-# Triggers: Push to main, Manual dispatch
-# Deploys: Frontend to Vercel production
-# Features: Semantic versioning, GitHub releases, deployment tracking
-# =============================================================================
-
 name: Release & Deploy
 
 on:

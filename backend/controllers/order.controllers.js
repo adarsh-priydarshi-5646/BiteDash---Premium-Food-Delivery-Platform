@@ -1,20 +1,14 @@
-/**
- * Order Controller - Complete order lifecycle management
- * 
- * Features: Place orders (COD/Stripe), assign delivery boys via geolocation,
- * real-time status updates via Socket.IO, OTP verification for delivery
- * Supports multi-shop orders, delivery tracking & order ratings
- */
 import DeliveryAssignment from "../models/deliveryAssignment.model.js";
 import Order from "../models/order.model.js";
 import Shop from "../models/shop.model.js";
 import User from "../models/user.model.js";
 import { sendDeliveryOtpMailSendGrid } from "../utils/sendgridMail.js";
 import stripe from "../config/stripe.js";
+import dotenv from "dotenv";
 
-/**
- * Assigns nearby available delivery boys to order via geospatial query
- */
+dotenv.config();
+
+
 const assignDeliveryBoys = async (order, io) => {
   try {
     for (const shopOrder of order.shopOrders) {
@@ -271,6 +265,7 @@ export const updateOrderStatus = async (req, res) => {
     
     
     if ((status === "accepted" || status === "preparing" || status === "ready") && !shopOrder.assignment) {
+       console.log(`Order accepted/preparing. Triggering delivery assignment for shopOrder: ${shopOrder._id}`);
        const io = req.app.get("io");
        if(io){
           
@@ -400,6 +395,7 @@ export const updateOrderStatus = async (req, res) => {
 export const getDeliveryBoyAssignment = async (req, res) => {
   try {
     const deliveryBoyId = req.userId;
+    console.log(`Fetching assignments for delivery boy: ${deliveryBoyId}`);
     
     const assignments = await DeliveryAssignment.find({
       brodcastedTo: deliveryBoyId,
@@ -408,6 +404,7 @@ export const getDeliveryBoyAssignment = async (req, res) => {
       .populate("order")
       .populate("shop");
 
+    console.log(`Found ${assignments.length} assignments for delivery boy ${deliveryBoyId}`);
 
     
     const validAssignments = assignments.filter(a => {
@@ -421,6 +418,7 @@ export const getDeliveryBoyAssignment = async (req, res) => {
         
         return true;
     });
+    console.log(`Valid assignments: ${validAssignments.length}`);
 
     const formated = validAssignments.map((a) => ({
       assignmentId: a._id,
@@ -444,13 +442,17 @@ export const getDeliveryBoyAssignment = async (req, res) => {
 export const acceptOrder = async (req, res) => {
   try {
     const { assignmentId } = req.params;
+    console.log(`Delivery boy ${req.userId} attempting to accept assignment ${assignmentId}`);
     
     const assignment = await DeliveryAssignment.findById(assignmentId);
     if (!assignment) {
+      console.log(`Assignment ${assignmentId} not found`);
       return res.status(400).json({ message: "assignment not found" });
     }
     
+    console.log(`📋 Assignment status: ${assignment.status}`);
     if (assignment.status !== "brodcasted") {
+      console.log(`Assignment is not brodcasted, current status: ${assignment.status}`);
       return res.status(400).json({ message: "assignment is expired" });
     }
 
@@ -460,6 +462,7 @@ export const acceptOrder = async (req, res) => {
     });
 
     if (alreadyAssigned) {
+      console.log(`Delivery boy ${req.userId} already assigned to order ${alreadyAssigned.order}`);
       return res
         .status(400)
         .json({ message: "You are already assigned to another order" });
@@ -469,15 +472,18 @@ export const acceptOrder = async (req, res) => {
     assignment.status = "assigned";
     assignment.acceptedAt = new Date();
     await assignment.save();
+    console.log(`Assignment ${assignmentId} accepted by delivery boy ${req.userId}`);
 
     const order = await Order.findById(assignment.order);
     if (!order) {
+      console.log(`Order ${assignment.order} not found`);
       return res.status(400).json({ message: "order not found" });
     }
 
     let shopOrder = order.shopOrders.id(assignment.shopOrderId);
     shopOrder.assignedDeliveryBoy = req.userId;
     await order.save();
+    console.log(`Order ${order._id} updated with delivery boy ${req.userId}`);
 
     return res.status(200).json({
       message: "order accepted",
@@ -582,12 +588,15 @@ export const sendDeliveryOtp = async (req, res) => {
     await order.save();
     
     
+    console.log(`Delivery OTP generated for order ${orderId} - Customer: ${order.user.fullName}`);
     
     
     try {
       await sendDeliveryOtpMailSendGrid(order.user, otp);
+      console.log(`Delivery OTP email sent successfully to ${order.user.email} via SendGrid`);
     } catch (emailError) {
       console.error("SendGrid failed:", emailError.message);
+      console.log(`OTP available in logs above for manual sharing`);
     }
     
     return res
@@ -633,6 +642,7 @@ export const verifyDeliveryOtp = async (req, res) => {
       assignedTo: shopOrder.assignedDeliveryBoy,
     });
 
+    console.log("Order Delivered:", orderId);
 
     
     const io = req.app.get("io");
@@ -645,6 +655,7 @@ export const verifyDeliveryOtp = async (req, res) => {
           shopOrderId: shopOrder._id,
           message: "Order has been delivered successfully!",
         });
+        console.log("Owner notified:", owner.socketId);
       }
 
       
@@ -655,6 +666,7 @@ export const verifyDeliveryOtp = async (req, res) => {
           shopOrderId: shopOrder._id,
           message: "Your order has been delivered!",
         });
+        console.log("User notified:", userSocketId);
       }
     }
 
@@ -905,6 +917,7 @@ export const createStripePaymentIntent = async (req, res) => {
       },
     });
 
+    // Update order with stripeSessionId
     await Order.findByIdAndUpdate(orderId, { stripeSessionId: session.id });
 
     return res.status(200).json({
@@ -948,6 +961,7 @@ export const verifyStripePayment = async (req, res) => {
     await order.populate("shopOrders.owner", "name socketId");
     await order.populate("user", "name email mobile");
 
+    console.log("Stripe Payment Verified for Order:", orderId);
 
     
     for (const shopOrder of order.shopOrders) {
@@ -955,6 +969,7 @@ export const verifyStripePayment = async (req, res) => {
       if (owner) {
         owner.totalEarnings = (owner.totalEarnings || 0) + shopOrder.subtotal;
         await owner.save();
+        console.log(`Owner earnings updated: ${owner.fullName} +₹${shopOrder.subtotal}`);
       }
     }
 
@@ -962,6 +977,7 @@ export const verifyStripePayment = async (req, res) => {
 
     
     if (io) {
+      console.log("Sending notifications...");
       
       
       order.shopOrders.forEach((shopOrder) => {
@@ -976,6 +992,7 @@ export const verifyStripePayment = async (req, res) => {
             deliveryAddress: order.deliveryAddress,
             payment: order.payment,
           });
+          console.log(`Owner notified: ${shopOrder.owner.name}`);
         }
       });
 

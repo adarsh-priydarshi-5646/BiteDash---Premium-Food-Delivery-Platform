@@ -1,10 +1,3 @@
-/**
- * Create/Edit Shop Page - Restaurant profile setup
- * 
- * Form: Shop name, city, state, address, banner image upload
- * Creates new shop or updates existing based on owner's shop status
- * Image upload via Cloudinary, form validation
- */
 import React, { useState } from "react";
 import { IoIosArrowRoundBack, IoMdCloudUpload } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";

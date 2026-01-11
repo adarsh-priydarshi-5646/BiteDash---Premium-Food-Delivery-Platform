@@ -1,10 +1,3 @@
-/**
- * DeliveryBoy Dashboard - Delivery partner's main interface
- * 
- * Tabs: Available Orders, Current Delivery, Delivery History, Stats
- * Features: Accept orders, OTP verification, earnings chart, real-time tracking
- * Socket.IO integration for new order notifications
- */
 import React from "react";
 import Nav from "./Nav";
 import { useSelector } from "react-redux";
@@ -177,6 +170,7 @@ function DeliveryBoy() {
       );
       
       
+      // OTP is sent to user mobile/email
 
     } catch (error) {
       console.error("Background OTP send failed:", error);

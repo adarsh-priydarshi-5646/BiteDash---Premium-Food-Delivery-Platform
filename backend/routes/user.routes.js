@@ -1,10 +1,3 @@
-/**
- * User Routes - Profile, addresses, bank details & location management
- * 
- * Endpoints: /me, /update-profile, /update-location, /addresses, /bank-details, /stats
- * Features: Multiple saved addresses, geolocation updates, owner bank details
- * All routes protected with JWT authentication
- */
 import express from "express";
 import {
   getCurrentUser,

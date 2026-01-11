@@ -1,6 +1,3 @@
-/**
- * Update Default Images - Updates restaurant & item images with Unsplash URLs
- */
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import Shop from "./models/shop.model.js";

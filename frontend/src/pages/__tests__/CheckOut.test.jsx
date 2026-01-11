@@ -1,9 +1,3 @@
-/**
- * CheckOut Page Tests - Order placement flow
- * 
- * Tests: Address selection, payment method, order submission
- * Mocks: Axios for API, Redux store with cart & user data
- */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import CheckOut from '../CheckOut';
@@ -11,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
+// Mock dependencies
 vi.mock('axios');
 vi.mock('react-router-dom', async () => {
     const actual = await vi.importActual('react-router-dom');
@@ -20,6 +15,7 @@ vi.mock('react-router-dom', async () => {
     };
 });
 
+// Mock Redux
 const mockDispatch = vi.fn();
 vi.mock('react-redux', async () => {
     return {
@@ -29,6 +25,7 @@ vi.mock('react-redux', async () => {
     };
 });
 
+// Mock Leaflet (CRITICAL for testing components with Maps)
 vi.mock('react-leaflet', () => ({
     MapContainer: ({ children }) => <div data-testid="map-container">{children}</div>,
     TileLayer: () => <div data-testid="tile-layer" />,
@@ -36,6 +33,7 @@ vi.mock('react-leaflet', () => ({
     useMap: () => ({ setView: vi.fn() }),
 }));
 
+// Mock Stripe
 vi.mock('@stripe/stripe-js', () => ({
     loadStripe: vi.fn().mockResolvedValue({}),
 }));
@@ -57,6 +55,7 @@ vi.mock('../../components/AddressAutocomplete', () => ({
     )
 }));
 
+// Mock icons
 vi.mock('react-icons/io', () => ({ IoIosArrowRoundBack: () => <div>Icon</div> }));
 vi.mock('react-icons/io5', () => ({ IoSearchOutline: () => <div>Icon</div>, IoLocationSharp: () => <div>Icon</div> }));
 vi.mock('react-icons/tb', () => ({ TbCurrentLocation: () => <div>Icon</div> }));
@@ -88,7 +87,8 @@ describe('CheckOut Component', () => {
     };
 
     it('renders checkout form and summary', () => {
-        useSelector.mockReturnValue(defaultState.user);
+        useSelector.mockReturnValue(defaultState.user); // Hack for first selector
+        // Actually CheckOut uses multiple selectors. We need to mock implementation.
         useSelector.mockImplementation((selector) => {
             const state = defaultState;
             return selector(state);
@@ -136,6 +136,7 @@ describe('CheckOut Component', () => {
             </BrowserRouter>
         );
         
+        // Search address via autocomplete mock
         fireEvent.change(screen.getByPlaceholderText('Search for a building, street or area...'), { target: { value: 'Test Address' } });
 
         const placeOrderBtn = screen.getByText('Place Order');

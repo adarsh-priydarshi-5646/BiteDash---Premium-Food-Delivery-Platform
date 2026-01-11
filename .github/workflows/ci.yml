@@ -1,12 +1,3 @@
-# =============================================================================
-# CI Pipeline - Continuous Integration for BiteDash
-# =============================================================================
-# 
-# Triggers: Push to main/develop, Pull requests
-# Jobs: Frontend (lint, test, build), Backend (syntax check)
-# Features: Caching, concurrent job cancellation
-# =============================================================================
-
 name: CI Pipeline
 
 on:

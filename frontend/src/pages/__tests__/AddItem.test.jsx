@@ -1,9 +1,3 @@
-/**
- * AddItem Page Tests - Menu item creation form
- * 
- * Tests: Form rendering, validation, image upload, submit
- * Mocks: Axios for API, Redux store for owner data
- */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import AddItem from '../AddItem';
@@ -21,6 +15,7 @@ vi.mock('react-router-dom', async () => {
     };
 });
 
+// Mock Redux
 const mockDispatch = vi.fn();
 vi.mock('react-redux', async () => {
     return {
@@ -66,6 +61,7 @@ describe('AddItem Component', () => {
         fireEvent.change(screen.getByPlaceholderText('e.g. Butter Chicken, Paneer Tikka...'), { target: { value: 'New Dish' } });
         fireEvent.change(screen.getByPlaceholderText('0.00'), { target: { value: '200' } });
         
+        // Select Category
         const select = screen.getByRole('combobox');
         fireEvent.change(select, { target: { value: 'Pizza' } });
 

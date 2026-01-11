@@ -1,10 +1,3 @@
-/**
- * Footer Component - Site-wide footer with branding & links
- * 
- * Sections: About, Quick Links, Contact Info, Social Media
- * Responsive grid layout, dynamic copyright year
- * Links to docs, profile, orders pages
- */
 import React from 'react';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaEnvelope, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';

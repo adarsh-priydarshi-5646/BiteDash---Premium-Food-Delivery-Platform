@@ -1,15 +1,10 @@
-/**
- * SignIn Page Tests - User authentication
- * 
- * Tests: Form validation, login submission, error handling, Google OAuth
- * Mocks: Axios for API calls, React Router navigation
- */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import SignIn from '../SignIn';
 import { BrowserRouter } from 'react-router-dom';
 import axios from 'axios';
 
+// Mock dependencies
 vi.mock('axios');
 vi.mock('react-router-dom', async () => {
     const actual = await vi.importActual('react-router-dom');
@@ -25,6 +20,7 @@ vi.mock('../../hooks/useGetCity', () => ({
     })
 }));
 
+// Mock Redux
 const mockDispatch = vi.fn();
 vi.mock('react-redux', async () => {
     return {
@@ -33,6 +29,7 @@ vi.mock('react-redux', async () => {
     };
 });
 
+// Mock specific icons (react-icons/fa and fc)
 vi.mock('react-icons/fa', () => ({
     FaRegEye: () => <div data-testid="eye-icon" />,
     FaRegEyeSlash: () => <div data-testid="eye-slash-icon" />,

@@ -1,9 +1,3 @@
-/**
- * LandingPage Tests - Public homepage for unauthenticated users
- * 
- * Tests: Hero section, city search, food collections, CTA buttons
- * Mocks: Redux store, React Router navigation
- */
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import LandingPage from '../LandingPage';
@@ -11,6 +5,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
 
+// Mock hooks
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -36,6 +31,7 @@ vi.mock('../../hooks/useGetCity', () => ({
   }),
 }));
 
+// Mock react-icons
 vi.mock('react-icons/fa', () => {
   const Icon = (props) => <span {...props} data-testid="icon" />;
   return {
@@ -53,6 +49,7 @@ vi.mock('react-icons/fa', () => {
   };
 });
 
+// Mock framer-motion to avoid animation issues in tests
 vi.mock('framer-motion', () => ({
   motion: {
     div: ({ children, whileHover, whileInView, initial, animate, transition, variants, viewport, ...props }) => <div {...props}>{children}</div>,

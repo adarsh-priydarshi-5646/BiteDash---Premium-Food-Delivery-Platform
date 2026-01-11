@@ -1,10 +1,3 @@
-/**
- * Sign In Page - User authentication
- * 
- * Methods: Email/password login, Google OAuth via Firebase
- * Features: Password visibility toggle, remember me, forgot password link
- * Redirects to home on success, shows error toast on failure
- */
 import React from "react";
 import { useState } from "react";
 import { FaRegEye } from "react-icons/fa";
@@ -46,6 +39,7 @@ function SignIn() {
       dispatch(setUserData(result.data));
       setErr("");
       setLoading(false);
+      // Trigger location fetch on successful login
       getCity().catch(e => console.error("Initial city fetch failed:", e));
       navigate("/");
     } catch (error) {
@@ -69,6 +63,7 @@ function SignIn() {
         { withCredentials: true }
       );
       dispatch(setUserData(data));
+      // Trigger location fetch on successful login
       getCity().catch(e => console.error("Initial city fetch failed:", e));
       navigate("/");
     } catch (error) {
@@ -78,6 +73,7 @@ function SignIn() {
   };
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-4 bg-white relative">
+       {}
        <div className="absolute top-6 left-6 cursor-pointer" onClick={() => navigate("/")}>
           <h1 className="text-3xl font-extrabold italic text-[#E23744] tracking-tight">BiteDash</h1>
        </div>

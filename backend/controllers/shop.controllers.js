@@ -1,10 +1,3 @@
-/**
- * Shop Controller - Restaurant/Shop CRUD operations with city-based filtering
- * 
- * Endpoints: createEditShop, getMyShop, getShopByCity
- * Features: Image upload via Cloudinary, owner-shop relationship, default shop support
- * Uses regex sanitization to prevent ReDoS attacks in city search
- */
 import Shop from "../models/shop.model.js";
 import uploadOnCloudinary from "../utils/cloudinary.js";
 import { escapeRegex } from "../utils/sanitize.js";
@@ -73,6 +66,7 @@ export const getShopByCity = async (req, res) => {
   try {
     const { city } = req.params;
 
+    // Escape regex special characters to prevent ReDoS
     const safeCity = escapeRegex(city);
     
     const cityShops = await Shop.find({

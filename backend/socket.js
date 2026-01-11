@@ -1,16 +1,10 @@
-/**
- * Socket.IO Handler - Real-time bidirectional communication
- * 
- * Events: identity (user connection), updateLocation (delivery tracking)
- * Features: User socket ID storage, delivery boy location broadcasts
- * Used for order status updates, delivery tracking, new order notifications
- */
 import User from "./models/user.model.js";
+
 export const socketHandler = (io) => {
   io.on("connection", (socket) => {
     socket.on("identity", async ({ userId }) => {
       try {
-        await User.findByIdAndUpdate(
+        const user = await User.findByIdAndUpdate(
           userId,
           {
             socketId: socket.id,
@@ -27,7 +21,7 @@ export const socketHandler = (io) => {
 
     socket.on("updateLocation", async ({ latitude, longitude, userId }) => {
       try {
-        await User.findByIdAndUpdate(userId, {
+        const user = await User.findByIdAndUpdate(userId, {
           location: {
             type: "Point",
             coordinates: [longitude, latitude],
@@ -36,7 +30,7 @@ export const socketHandler = (io) => {
           socketId: socket.id,
         });
 
-        if (userId) {
+        if (user) {
           io.emit("updateDeliveryLocation", {
             deliveryBoyId: userId,
             latitude,

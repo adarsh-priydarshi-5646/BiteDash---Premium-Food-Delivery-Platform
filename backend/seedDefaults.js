@@ -1,6 +1,3 @@
-/**
- * Seed Default Users - Creates demo users for testing (owner, user, delivery)
- */
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";

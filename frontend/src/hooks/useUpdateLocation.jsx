@@ -1,10 +1,3 @@
-/**
- * useUpdateLocation Hook - Real-time location tracking for delivery
- * 
- * Uses browser Geolocation API with watchPosition for continuous updates
- * Sends location to server via PUT /user/update-location
- * Emits Socket.IO 'updateLocation' event for real-time tracking
- */
 import axios from "axios";
 import React, { useEffect } from "react";
 import { serverUrl } from "../App";
@@ -39,23 +32,27 @@ function useUpdateLocation() {
         );
         lastUpdate = now;
       } catch (err) {
+        // Silent error for background updates
       }
     };
 
     let watchId;
     const startWatching = () => {
+      // Permission check to avoid redundant prompts or violations
       if (navigator.geolocation) {
         watchId = navigator.geolocation.watchPosition(
           (pos) => {
             updateLocation(pos.coords.latitude, pos.coords.longitude);
           },
           (err) => {
+            // Silently handle location errors in background
           },
           { enableHighAccuracy: false, maximumAge: 300000, timeout: 10000 }
         );
       }
     };
 
+    // Fix: Only request geolocation after a user gesture if permission not already granted
     const handleFirstInteraction = () => {
       startWatching();
       window.removeEventListener('click', handleFirstInteraction);
@@ -72,6 +69,7 @@ function useUpdateLocation() {
         }
       });
     } else {
+      // Fallback: wait for interaction to be safe
       window.addEventListener('click', handleFirstInteraction);
       window.addEventListener('touchstart', handleFirstInteraction);
     }

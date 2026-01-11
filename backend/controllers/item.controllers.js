@@ -1,10 +1,3 @@
-/**
- * Item Controller - Food menu items CRUD with search & rating system
- * 
- * Endpoints: addItem, editItem, deleteItem, getItemById, getItemByCity, searchItems, rating
- * Features: Cloudinary image upload, city-based filtering, text search, 5-star rating system
- * Items linked to shops, supports veg/non-veg foodType & category classification
- */
 import Item from "../models/item.model.js";
 import Shop from "../models/shop.model.js";
 import uploadOnCloudinary from "../utils/cloudinary.js";
@@ -125,6 +118,7 @@ export const getItemByCity = async (req, res) => {
       return res.status(400).json({ message: "city is required" });
     }
     
+    // Escape regex special characters to prevent ReDoS
     const safeCity = escapeRegex(city);
     
     const cityShops = await Shop.find({
@@ -169,6 +163,7 @@ export const searchItems = async (req, res) => {
       return res.status(400).json({ message: "query and city required" });
     }
     
+    // Escape regex special characters to prevent ReDoS
     const safeCity = escapeRegex(city);
     const safeQuery = escapeRegex(query);
     

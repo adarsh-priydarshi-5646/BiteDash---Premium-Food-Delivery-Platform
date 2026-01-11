@@ -1,6 +1,3 @@
-/**
- * Seed Default Restaurant - Creates demo restaurant with sample menu items
- */
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import User from "./models/user.model.js";

@@ -1,14 +1,9 @@
-/**
- * App Component Tests - Root component integration tests
- * 
- * Tests: Routing, auth state, loading states, role-based rendering
- * Mocks: All custom hooks, Redux store, React Router
- */
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import App from '../App';
 import { BrowserRouter } from 'react-router-dom';
 
+// Mock all custom hooks to avoid side effects
 vi.mock('../hooks/useGetCurrentUser');
 vi.mock('../hooks/useGetMyShop');
 vi.mock('../hooks/useGetShopByCity');
@@ -17,6 +12,7 @@ vi.mock('../hooks/useGetMyOrders');
 vi.mock('../hooks/useUpdateLocation');
 vi.mock('../hooks/useGetCity', () => ({ default: () => ({ getCity: vi.fn() }) }));
 
+// Mock socket.io
 vi.mock('socket.io-client', () => ({
   io: () => ({
     on: vi.fn(),
@@ -25,6 +21,7 @@ vi.mock('socket.io-client', () => ({
   }),
 }));
 
+// Mock Redux
 const mockDispatch = vi.fn();
 vi.mock('react-redux', async () => {
   const actual = await vi.importActual('react-redux');
@@ -40,6 +37,7 @@ vi.mock('react-redux', async () => {
   };
 });
 
+// Mock react-icons
 vi.mock('react-icons/fa', () => {
   const Icon = (props) => <span {...props} data-testid="icon" />;
   return {
@@ -57,6 +55,7 @@ vi.mock('react-icons/fa', () => {
   };
 });
 
+// Mock Framer Motion to avoid index usage errors in tests
 vi.mock('framer-motion', () => ({
   motion: {
     div: ({ children, whileHover, whileInView, initial, animate, transition, variants, viewport, ...props }) => <div {...props}>{children}</div>,
@@ -75,6 +74,7 @@ describe('App Component', () => {
         <App />
       </BrowserRouter>
     );
+    // Wait for lazy-loaded component to render
     const heading = await findByRole('heading', { name: 'BiteDash', level: 1 });
     expect(heading).toBeInTheDocument();
   });

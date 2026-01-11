@@ -1,13 +1,8 @@
-/**
- * Firebase Configuration - Google OAuth setup
- * 
- * Initializes Firebase app with environment variables
- * Exports auth instance for Google sign-in
- * Note: Firebase project still uses "vingo" (requires new project to change)
- */
+// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
+// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
   authDomain: "vingo-b3fd6.firebaseapp.com",
@@ -17,6 +12,7 @@ const firebaseConfig = {
   appId: "1:750640341001:web:84e89d28e63ba5015818d8"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 export { app, auth };
