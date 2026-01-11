@@ -472,7 +472,10 @@ export default function Documentation() {
             </a>
           </div>
           <div className="flex items-center gap-4">
-            <a href="/" className="text-sm text-gray-600 hover:text-gray-900 hidden sm:block">App</a>
+            <a href="https://bitedash-food.vercel.app" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3 py-1.5 bg-[#E23744] text-white text-sm font-medium rounded-lg hover:bg-[#c92f3c] transition-colors">
+              <FaRocket size={12} />
+              Live App
+            </a>
             <a href="https://github.com/adarsh-priydarshi-5646/Food-Delivery-Full-Stack-App" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-900"><FaGithub size={20} /></a>
           </div>
         </div>
