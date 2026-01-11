@@ -9,13 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { IoIosArrowRoundBack, IoMdCloudUpload } from 'react-icons/io';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import {
-  FaUtensils,
-  FaRupeeSign,
-  FaTag,
-  FaLeaf,
-  FaDrumstickBite,
-} from 'react-icons/fa';
+import { FaUtensils, FaRupeeSign, FaTag, FaLeaf, FaDrumstickBite } from 'react-icons/fa';
 import axios from 'axios';
 import { serverUrl } from '../App';
 import { setMyShopData } from '../redux/ownerSlice';
@@ -69,13 +63,9 @@ function EditItem() {
       if (backendImage) {
         formData.append('image', backendImage);
       }
-      const result = await axios.post(
-        `${serverUrl}/api/item/edit-item/${itemId}`,
-        formData,
-        {
-          withCredentials: true,
-        },
-      );
+      const result = await axios.post(`${serverUrl}/api/item/edit-item/${itemId}`, formData, {
+        withCredentials: true,
+      });
       dispatch(setMyShopData(result.data));
       setLoading(false);
       navigate('/');
@@ -88,12 +78,9 @@ function EditItem() {
   useEffect(() => {
     const handleGetItemById = async () => {
       try {
-        const result = await axios.get(
-          `${serverUrl}/api/item/get-by-id/${itemId}`,
-          {
-            withCredentials: true,
-          },
-        );
+        const result = await axios.get(`${serverUrl}/api/item/get-by-id/${itemId}`, {
+          withCredentials: true,
+        });
         setCurrentItem(result.data);
       } catch (error) {
         console.error(error);
@@ -120,10 +107,7 @@ function EditItem() {
             onClick={() => navigate('/')}
             className="group flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm hover:shadow-md border border-gray-100 transition-all"
           >
-            <IoIosArrowRoundBack
-              size={24}
-              className="text-gray-600 group-hover:text-[#ff4d2d]"
-            />
+            <IoIosArrowRoundBack size={24} className="text-gray-600 group-hover:text-[#ff4d2d]" />
           </button>
           <h1 className="text-3xl font-extrabold text-gray-900">Edit Item</h1>
         </div>
@@ -140,9 +124,7 @@ function EditItem() {
 
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">
-                  Item Name
-                </label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Item Name</label>
                 <input
                   type="text"
                   placeholder="e.g. Butter Chicken"
@@ -155,9 +137,7 @@ function EditItem() {
 
               <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">
-                    Category
-                  </label>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Category</label>
                   <div className="relative">
                     <select
                       className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:bg-white focus:ring-2 focus:ring-[#ff4d2d]/20 focus:border-[#ff4d2d] transition-all outline-none appearance-none cursor-pointer"
@@ -179,9 +159,7 @@ function EditItem() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">
-                    Type
-                  </label>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Type</label>
                   <div className="flex gap-2">
                     <button
                       type="button"
@@ -202,9 +180,7 @@ function EditItem() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">
-                  Price (₹)
-                </label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Price (₹)</label>
                 <div className="relative">
                   <span className="absolute left-4 top-3.5 text-gray-400">
                     <FaRupeeSign />
@@ -222,9 +198,7 @@ function EditItem() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">
-                  Upload Image
-                </label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Upload Image</label>
                 <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors relative overflow-hidden group">
                   {frontendImage ? (
                     <div className="relative w-full h-full">
@@ -246,17 +220,11 @@ function EditItem() {
                         size={32}
                       />
                       <p className="text-sm text-gray-500">
-                        <span className="font-semibold">Click to upload</span>{' '}
-                        or drag and drop
+                        <span className="font-semibold">Click to upload</span> or drag and drop
                       </p>
                     </div>
                   )}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleImage}
-                  />
+                  <input type="file" accept="image/*" className="hidden" onChange={handleImage} />
                 </label>
               </div>
 
@@ -265,11 +233,7 @@ function EditItem() {
                   className="w-full bg-[#ff4d2d] text-white px-6 py-4 rounded-xl font-bold shadow-lg hover:bg-orange-600 hover:shadow-orange-500/30 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer disabled:opacity-70 flex items-center justify-center gap-2"
                   disabled={loading}
                 >
-                  {loading ? (
-                    <ClipLoader size={20} color="white" />
-                  ) : (
-                    'Save Changes'
-                  )}
+                  {loading ? <ClipLoader size={20} color="white" /> : 'Save Changes'}
                 </button>
               </div>
             </form>
@@ -289,11 +253,7 @@ function EditItem() {
               <div className="bg-white rounded-3xl shadow-2xl overflow-hidden transform hover:scale-105 transition-transform duration-300">
                 <div className="relative h-56 bg-gray-100">
                   {frontendImage ? (
-                    <img
-                      src={frontendImage}
-                      alt=""
-                      className="w-full h-full object-cover"
-                    />
+                    <img src={frontendImage} alt="" className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-300">
                       <FaUtensils size={40} />
@@ -319,14 +279,11 @@ function EditItem() {
                   </div>
 
                   <p className="text-gray-500 text-sm mb-6 line-clamp-2">
-                    Delicious {foodType} dish prepared fresh. Add this to your
-                    cart and enjoy!
+                    Delicious {foodType} dish prepared fresh. Add this to your cart and enjoy!
                   </p>
 
                   <div className="flex items-center justify-between">
-                    <span className="text-2xl font-extrabold text-[#ff4d2d]">
-                      ₹{price || 0}
-                    </span>
+                    <span className="text-2xl font-extrabold text-[#ff4d2d]">₹{price || 0}</span>
                     <button className="px-6 py-2 bg-gray-900 text-white rounded-xl text-sm font-bold shadow-lg shadow-gray-200">
                       Add +
                     </button>

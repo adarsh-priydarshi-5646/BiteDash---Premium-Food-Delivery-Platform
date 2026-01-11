@@ -43,9 +43,7 @@ export const addItem = async (req, res) => {
     return res.status(201).json(shop);
   } catch (error) {
     console.error('Add item error:', error);
-    return res
-      .status(500)
-      .json({ message: 'Failed to add item. Please try again.' });
+    return res.status(500).json({ message: 'Failed to add item. Please try again.' });
   }
 };
 
@@ -68,7 +66,7 @@ export const editItem = async (req, res) => {
         price,
         image,
       },
-      { new: true },
+      { new: true }
     );
     if (!item) {
       return res.status(400).json({ message: 'item not found' });
@@ -80,9 +78,7 @@ export const editItem = async (req, res) => {
     return res.status(200).json(shop);
   } catch (error) {
     console.error('Edit item error:', error);
-    return res
-      .status(500)
-      .json({ message: 'Failed to edit item. Please try again.' });
+    return res.status(500).json({ message: 'Failed to edit item. Please try again.' });
   }
 };
 
@@ -96,9 +92,7 @@ export const getItemById = async (req, res) => {
     return res.status(200).json(item);
   } catch (error) {
     console.error('Get item error:', error);
-    return res
-      .status(500)
-      .json({ message: 'Failed to get item. Please try again.' });
+    return res.status(500).json({ message: 'Failed to get item. Please try again.' });
   }
 };
 
@@ -119,9 +113,7 @@ export const deleteItem = async (req, res) => {
     return res.status(200).json(shop);
   } catch (error) {
     console.error('Delete item error:', error);
-    return res
-      .status(500)
-      .json({ message: 'Failed to delete item. Please try again.' });
+    return res.status(500).json({ message: 'Failed to delete item. Please try again.' });
   }
 };
 
@@ -139,22 +131,16 @@ export const getItemByCity = async (req, res) => {
       isDefault: false,
     }).populate('items');
 
-    const defaultShop = await Shop.findOne({ isDefault: true }).populate(
-      'items',
-    );
+    const defaultShop = await Shop.findOne({ isDefault: true }).populate('items');
 
     const cityShopIds = cityShops.map((shop) => shop._id);
-    const shopIds = defaultShop
-      ? [defaultShop._id, ...cityShopIds]
-      : cityShopIds;
+    const shopIds = defaultShop ? [defaultShop._id, ...cityShopIds] : cityShopIds;
 
     const items = await Item.find({ shop: { $in: shopIds } });
     return res.status(200).json(items);
   } catch (error) {
     console.error('Get item by city error:', error);
-    return res
-      .status(500)
-      .json({ message: 'Failed to get items. Please try again.' });
+    return res.status(500).json({ message: 'Failed to get items. Please try again.' });
   }
 };
 
@@ -171,9 +157,7 @@ export const getItemsByShop = async (req, res) => {
     });
   } catch (error) {
     console.error('Get item by shop error:', error);
-    return res
-      .status(500)
-      .json({ message: 'Failed to get items. Please try again.' });
+    return res.status(500).json({ message: 'Failed to get items. Please try again.' });
   }
 };
 
@@ -192,14 +176,10 @@ export const searchItems = async (req, res) => {
       isDefault: false,
     }).populate('items');
 
-    const defaultShop = await Shop.findOne({ isDefault: true }).populate(
-      'items',
-    );
+    const defaultShop = await Shop.findOne({ isDefault: true }).populate('items');
 
     const cityShopIds = cityShops.map((s) => s._id);
-    const shopIds = defaultShop
-      ? [defaultShop._id, ...cityShopIds]
-      : cityShopIds;
+    const shopIds = defaultShop ? [defaultShop._id, ...cityShopIds] : cityShopIds;
 
     const items = await Item.find({
       shop: { $in: shopIds },
@@ -212,9 +192,7 @@ export const searchItems = async (req, res) => {
     return res.status(200).json(items);
   } catch (error) {
     console.error('Search item error:', error);
-    return res
-      .status(500)
-      .json({ message: 'Search failed. Please try again.' });
+    return res.status(500).json({ message: 'Search failed. Please try again.' });
   }
 };
 
@@ -236,8 +214,7 @@ export const rating = async (req, res) => {
     }
 
     const newCount = item.rating.count + 1;
-    const newAverage =
-      (item.rating.average * item.rating.count + rating) / newCount;
+    const newAverage = (item.rating.average * item.rating.count + rating) / newCount;
 
     item.rating.count = newCount;
     item.rating.average = newAverage;
@@ -245,8 +222,6 @@ export const rating = async (req, res) => {
     return res.status(200).json({ rating: item.rating });
   } catch (error) {
     console.error('Rating error:', error);
-    return res
-      .status(500)
-      .json({ message: 'Failed to submit rating. Please try again.' });
+    return res.status(500).json({ message: 'Failed to submit rating. Please try again.' });
   }
 };

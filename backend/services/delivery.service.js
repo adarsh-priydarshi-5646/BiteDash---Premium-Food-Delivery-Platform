@@ -15,7 +15,7 @@ import { GEO_CONFIG, ASSIGNMENT_STATUS } from '../constants/index.js';
 export const findNearbyDeliveryBoys = async (
   longitude,
   latitude,
-  maxDistance = GEO_CONFIG.MAX_DELIVERY_DISTANCE,
+  maxDistance = GEO_CONFIG.MAX_DELIVERY_DISTANCE
 ) => {
   return await User.find({
     role: 'deliveryBoy',
@@ -37,9 +37,7 @@ export const findNearbyDeliveryBoys = async (
 export const getBusyDeliveryBoyIds = async (deliveryBoyIds) => {
   const busyIds = await DeliveryAssignment.find({
     assignedTo: { $in: deliveryBoyIds },
-    status: {
-      $nin: [ASSIGNMENT_STATUS.BROADCASTED, ASSIGNMENT_STATUS.COMPLETED],
-    },
+    status: { $nin: [ASSIGNMENT_STATUS.BROADCASTED, ASSIGNMENT_STATUS.COMPLETED] },
   }).distinct('assignedTo');
 
   return new Set(busyIds.map((id) => String(id)));
@@ -55,12 +53,7 @@ export const filterAvailableDeliveryBoys = (deliveryBoys, busyIdSet) => {
 /**
  * Create delivery assignment
  */
-export const createDeliveryAssignment = async (
-  orderId,
-  shopId,
-  shopOrderId,
-  candidates,
-) => {
+export const createDeliveryAssignment = async (orderId, shopId, shopOrderId, candidates) => {
   return await DeliveryAssignment.create({
     order: orderId,
     shop: shopId,
@@ -93,9 +86,7 @@ export const notifyDeliveryBoys = (io, deliveryBoys, assignmentData) => {
 export const isDeliveryBoyBusy = async (deliveryBoyId) => {
   const assignment = await DeliveryAssignment.findOne({
     assignedTo: deliveryBoyId,
-    status: {
-      $nin: [ASSIGNMENT_STATUS.BROADCASTED, ASSIGNMENT_STATUS.COMPLETED],
-    },
+    status: { $nin: [ASSIGNMENT_STATUS.BROADCASTED, ASSIGNMENT_STATUS.COMPLETED] },
   });
 
   return !!assignment;
@@ -122,11 +113,7 @@ export const acceptDeliveryAssignment = async (assignmentId, deliveryBoyId) => {
 /**
  * Complete delivery assignment
  */
-export const completeDeliveryAssignment = async (
-  shopOrderId,
-  orderId,
-  deliveryBoyId,
-) => {
+export const completeDeliveryAssignment = async (shopOrderId, orderId, deliveryBoyId) => {
   await DeliveryAssignment.deleteOne({
     shopOrderId,
     order: orderId,
@@ -137,10 +124,7 @@ export const completeDeliveryAssignment = async (
 /**
  * Calculate delivery earnings
  */
-export const calculateDeliveryEarnings = (
-  deliveryCount,
-  ratePerDelivery = 50,
-) => {
+export const calculateDeliveryEarnings = (deliveryCount, ratePerDelivery = 50) => {
   return deliveryCount * ratePerDelivery;
 };
 

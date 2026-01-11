@@ -68,11 +68,7 @@ describe('Nav Component', () => {
     });
     useSelector.mockImplementation((selector) => {
       const state = {
-        user: {
-          userData: mockUser,
-          currentCity: 'Mumbai',
-          cartItems: [{ id: 1 }],
-        },
+        user: { userData: mockUser, currentCity: 'Mumbai', cartItems: [{ id: 1 }] },
         owner: { myShopData: null },
       };
       return selector(state);
@@ -81,7 +77,7 @@ describe('Nav Component', () => {
     render(
       <BrowserRouter>
         <Nav />
-      </BrowserRouter>,
+      </BrowserRouter>
     );
 
     expect(screen.getByText('BiteDash')).toBeInTheDocument();
@@ -103,7 +99,7 @@ describe('Nav Component', () => {
     render(
       <BrowserRouter>
         <Nav />
-      </BrowserRouter>,
+      </BrowserRouter>
     );
 
     expect(screen.getByText('Add Item')).toBeInTheDocument();
@@ -116,14 +112,14 @@ describe('Nav Component', () => {
       selector({
         user: { userData: mockUser, currentCity: 'Mumbai', cartItems: [] },
         owner: { myShopData: null },
-      }),
+      })
     );
     axios.get.mockResolvedValueOnce({});
 
     render(
       <BrowserRouter>
         <Nav />
-      </BrowserRouter>,
+      </BrowserRouter>
     );
 
     fireEvent.click(screen.getByText('J'));
@@ -133,7 +129,7 @@ describe('Nav Component', () => {
     await waitFor(() => {
       expect(axios.get).toHaveBeenCalledWith(
         expect.stringContaining('/signout'),
-        expect.any(Object),
+        expect.any(Object)
       );
       expect(mockDispatch).toHaveBeenCalled();
     });
@@ -144,14 +140,14 @@ describe('Nav Component', () => {
       selector({
         user: { userData: mockUser, currentCity: 'Mumbai', cartItems: [] },
         owner: { myShopData: null },
-      }),
+      })
     );
     axios.get.mockResolvedValueOnce({ data: [] });
 
     render(
       <BrowserRouter>
         <Nav />
-      </BrowserRouter>,
+      </BrowserRouter>
     );
 
     const inputs = screen.getAllByPlaceholderText('Search delicious food...');
@@ -160,7 +156,7 @@ describe('Nav Component', () => {
     await waitFor(() => {
       expect(axios.get).toHaveBeenCalledWith(
         expect.stringContaining('query=Pizza'),
-        expect.any(Object),
+        expect.any(Object)
       );
       expect(mockDispatch).toHaveBeenCalled(); // setSearchItems
     });

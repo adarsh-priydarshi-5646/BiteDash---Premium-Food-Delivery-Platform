@@ -21,9 +21,7 @@ vi.mock('react-router-dom', async () => {
 
 vi.mock('../../hooks/useGetCity', () => ({
   default: () => ({
-    getCity: vi
-      .fn()
-      .mockResolvedValue({ city: 'Test City', address: 'Test Address' }),
+    getCity: vi.fn().mockResolvedValue({ city: 'Test City', address: 'Test Address' }),
   }),
 }));
 
@@ -58,7 +56,7 @@ describe('SignUp Component', () => {
     render(
       <BrowserRouter>
         <SignUp />
-      </BrowserRouter>,
+      </BrowserRouter>
     );
     expect(screen.getByPlaceholderText('Full Name')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Email')).toBeInTheDocument();
@@ -70,15 +68,13 @@ describe('SignUp Component', () => {
     render(
       <BrowserRouter>
         <SignUp />
-      </BrowserRouter>,
+      </BrowserRouter>
     );
 
     const googleBtn = screen.getByText('Continue with Google');
     fireEvent.click(googleBtn);
 
-    expect(
-      screen.getByText('Please enter your mobile number first'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Please enter your mobile number first')).toBeInTheDocument();
   });
 
   it('handles normal signup submission', async () => {
@@ -87,21 +83,17 @@ describe('SignUp Component', () => {
     render(
       <BrowserRouter>
         <SignUp />
-      </BrowserRouter>,
+      </BrowserRouter>
     );
 
-    fireEvent.change(screen.getByPlaceholderText('Full Name'), {
-      target: { value: 'John Doe' },
-    });
+    fireEvent.change(screen.getByPlaceholderText('Full Name'), { target: { value: 'John Doe' } });
     fireEvent.change(screen.getByPlaceholderText('Email'), {
       target: { value: 'john@example.com' },
     });
     fireEvent.change(screen.getByPlaceholderText('Mobile Number'), {
       target: { value: '9876543210' },
     });
-    fireEvent.change(screen.getByPlaceholderText('Password'), {
-      target: { value: 'pass123' },
-    });
+    fireEvent.change(screen.getByPlaceholderText('Password'), { target: { value: 'pass123' } });
 
     fireEvent.click(screen.getByText('Create Account'));
 
@@ -115,7 +107,7 @@ describe('SignUp Component', () => {
     render(
       <BrowserRouter>
         <SignUp />
-      </BrowserRouter>,
+      </BrowserRouter>
     );
 
     const ownerBtn = screen.getByText('Owner');

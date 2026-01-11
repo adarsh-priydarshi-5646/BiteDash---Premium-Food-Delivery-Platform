@@ -31,9 +31,7 @@ vi.mock('react-icons/fa', () => ({
   FaPlus: () => <div />,
 }));
 
-vi.mock('../../components/Nav', () => ({
-  default: () => <div data-testid="nav">Nav</div>,
-}));
+vi.mock('../../components/Nav', () => ({ default: () => <div data-testid="nav">Nav</div> }));
 vi.mock('../../components/OwnerOrderCard', () => ({
   default: ({ data }) => <div data-testid="order-card">{data._id}</div>,
 }));
@@ -70,7 +68,7 @@ describe('OwnerDashboard Component', () => {
     render(
       <BrowserRouter>
         <OwnerDashboard />
-      </BrowserRouter>,
+      </BrowserRouter>
     );
 
     expect(screen.getByText('Launch Your Restaurant')).toBeInTheDocument();
@@ -87,7 +85,7 @@ describe('OwnerDashboard Component', () => {
     render(
       <BrowserRouter>
         <OwnerDashboard />
-      </BrowserRouter>,
+      </BrowserRouter>
     );
 
     expect(screen.getByText('My Shop')).toBeInTheDocument();

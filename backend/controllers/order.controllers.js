@@ -48,9 +48,7 @@ const assignDeliveryBoys = async (order, io) => {
 
       const busyIdSet = new Set(busyIds.map((id) => String(id)));
 
-      const availableBoys = nearByDeliveryBoys.filter(
-        (b) => !busyIdSet.has(String(b._id)),
-      );
+      const availableBoys = nearByDeliveryBoys.filter((b) => !busyIdSet.has(String(b._id)));
 
       if (availableBoys.length === 0) {
         continue;
@@ -102,11 +100,7 @@ export const placeOrder = async (req, res) => {
     if (cartItems.length == 0 || !cartItems) {
       return res.status(400).json({ message: 'cart is empty' });
     }
-    if (
-      !deliveryAddress.text ||
-      !deliveryAddress.latitude ||
-      !deliveryAddress.longitude
-    ) {
+    if (!deliveryAddress.text || !deliveryAddress.latitude || !deliveryAddress.longitude) {
       return res.status(400).json({ message: 'send complete deliveryAddress' });
     }
 
@@ -127,10 +121,7 @@ export const placeOrder = async (req, res) => {
           return res.status(400).json({ message: 'shop not found' });
         }
         const items = groupItemsByShop[shopId];
-        const subtotal = items.reduce(
-          (sum, i) => sum + Number(i.price) * Number(i.quantity),
-          0,
-        );
+        const subtotal = items.reduce((sum, i) => sum + Number(i.price) * Number(i.quantity), 0);
         return {
           shop: shop._id,
           owner: shop.owner._id,
@@ -142,7 +133,7 @@ export const placeOrder = async (req, res) => {
             name: i.name,
           })),
         };
-      }),
+      })
     );
 
     const newOrder = await Order.create({
@@ -154,10 +145,7 @@ export const placeOrder = async (req, res) => {
       payment: paymentMethod === 'cod' ? true : false,
     });
 
-    await newOrder.populate(
-      'shopOrders.shopOrderItems.item',
-      'name image price',
-    );
+    await newOrder.populate('shopOrders.shopOrderItems.item', 'name image price');
     await newOrder.populate('shopOrders.shop', 'name');
     await newOrder.populate('shopOrders.owner', 'name socketId');
     await newOrder.populate('user', 'name email mobile');
@@ -183,9 +171,7 @@ export const placeOrder = async (req, res) => {
     return res.status(201).json(newOrder);
   } catch (error) {
     console.error('Place order error:', error);
-    return res
-      .status(500)
-      .json({ message: 'Failed to place order. Please try again.' });
+    return res.status(500).json({ message: 'Failed to place order. Please try again.' });
   }
 };
 
@@ -220,9 +206,7 @@ export const getMyOrders = async (req, res) => {
 
       return res.status(200).json(filteredOrders);
     } else if (user.role == 'deliveryBoy') {
-      const orders = await Order.find({
-        'shopOrders.assignedDeliveryBoy': req.userId,
-      })
+      const orders = await Order.find({ 'shopOrders.assignedDeliveryBoy': req.userId })
         .sort({ createdAt: -1 })
         .populate('shopOrders.shop', 'name address')
         .populate('user', 'fullName mobile location')
@@ -234,9 +218,7 @@ export const getMyOrders = async (req, res) => {
           paymentMethod: order.paymentMethod,
           user: order.user,
 
-          shopOrders: order.shopOrders.find(
-            (o) => o.assignedDeliveryBoy == req.userId,
-          ),
+          shopOrders: order.shopOrders.find((o) => o.assignedDeliveryBoy == req.userId),
           createdAt: order.createdAt,
           deliveryAddress: order.deliveryAddress,
           payment: order.payment,
@@ -247,9 +229,7 @@ export const getMyOrders = async (req, res) => {
     }
   } catch (error) {
     console.error('Get user orders error:', error);
-    return res
-      .status(500)
-      .json({ message: 'Failed to get orders. Please try again.' });
+    return res.status(500).json({ message: 'Failed to get orders. Please try again.' });
   }
 };
 
@@ -299,16 +279,13 @@ export const updateOrderStatus = async (req, res) => {
 
       const busyIdSet = new Set(busyIds.map((id) => String(id)));
 
-      const availableBoys = nearByDeliveryBoys.filter(
-        (b) => !busyIdSet.has(String(b._id)),
-      );
+      const availableBoys = nearByDeliveryBoys.filter((b) => !busyIdSet.has(String(b._id)));
       const candidates = availableBoys.map((b) => b._id);
 
       if (candidates.length == 0) {
         await order.save();
         return res.json({
-          message:
-            'order status updated but there is no available delivery boys',
+          message: 'order status updated but there is no available delivery boys',
         });
       }
 
@@ -345,10 +322,10 @@ export const updateOrderStatus = async (req, res) => {
               deliveryAddress: deliveryAssignment.order.deliveryAddress,
               items:
                 deliveryAssignment.order.shopOrders.find((so) =>
-                  so._id.equals(deliveryAssignment.shopOrderId),
+                  so._id.equals(deliveryAssignment.shopOrderId)
                 ).shopOrderItems || [],
               subtotal: deliveryAssignment.order.shopOrders.find((so) =>
-                so._id.equals(deliveryAssignment.shopOrderId),
+                so._id.equals(deliveryAssignment.shopOrderId)
               )?.subtotal,
             });
           }
@@ -359,10 +336,7 @@ export const updateOrderStatus = async (req, res) => {
     await order.save();
     const updatedShopOrder = order.shopOrders.find((o) => o.shop == shopId);
     await order.populate('shopOrders.shop', 'name');
-    await order.populate(
-      'shopOrders.assignedDeliveryBoy',
-      'fullName email mobile',
-    );
+    await order.populate('shopOrders.assignedDeliveryBoy', 'fullName email mobile');
     await order.populate('user', 'socketId');
 
     const io = req.app.get('io');
@@ -386,9 +360,7 @@ export const updateOrderStatus = async (req, res) => {
     });
   } catch (error) {
     console.error('Order status error:', error);
-    return res
-      .status(500)
-      .json({ message: 'Failed to update order status. Please try again.' });
+    return res.status(500).json({ message: 'Failed to update order status. Please try again.' });
   }
 };
 
@@ -406,9 +378,7 @@ export const getDeliveryBoyAssignment = async (req, res) => {
     const validAssignments = assignments.filter((a) => {
       if (!a.order || !a.shop) return false;
 
-      const shopOrder = a.order.shopOrders.find(
-        (so) => String(so._id) === String(a.shopOrderId),
-      );
+      const shopOrder = a.order.shopOrders.find((so) => String(so._id) === String(a.shopOrderId));
       if (!shopOrder) return false;
 
       if (shopOrder.status === 'cancelled') return false;
@@ -421,19 +391,14 @@ export const getDeliveryBoyAssignment = async (req, res) => {
       orderId: a.order._id,
       shopName: a.shop.name,
       deliveryAddress: a.order.deliveryAddress,
-      items:
-        a.order.shopOrders.find((so) => so._id.equals(a.shopOrderId))
-          ?.shopOrderItems || [],
-      subtotal: a.order.shopOrders.find((so) => so._id.equals(a.shopOrderId))
-        ?.subtotal,
+      items: a.order.shopOrders.find((so) => so._id.equals(a.shopOrderId))?.shopOrderItems || [],
+      subtotal: a.order.shopOrders.find((so) => so._id.equals(a.shopOrderId))?.subtotal,
     }));
 
     return res.status(200).json(formated);
   } catch (error) {
     console.error('Get assignment error:', error);
-    return res
-      .status(500)
-      .json({ message: 'Failed to get assignments. Please try again.' });
+    return res.status(500).json({ message: 'Failed to get assignments. Please try again.' });
   }
 };
 
@@ -456,9 +421,7 @@ export const acceptOrder = async (req, res) => {
     });
 
     if (alreadyAssigned) {
-      return res
-        .status(400)
-        .json({ message: 'You are already assigned to another order' });
+      return res.status(400).json({ message: 'You are already assigned to another order' });
     }
 
     assignment.assignedTo = req.userId;
@@ -480,9 +443,7 @@ export const acceptOrder = async (req, res) => {
     });
   } catch (error) {
     console.error('Accept order error:', error);
-    return res
-      .status(500)
-      .json({ message: 'Failed to accept order. Please try again.' });
+    return res.status(500).json({ message: 'Failed to accept order. Please try again.' });
   }
 };
 
@@ -507,7 +468,7 @@ export const getCurrentOrder = async (req, res) => {
     }
 
     const shopOrder = assignment.order.shopOrders.find(
-      (so) => String(so._id) == String(assignment.shopOrderId),
+      (so) => String(so._id) == String(assignment.shopOrderId)
     );
 
     if (!shopOrder) {
@@ -562,9 +523,7 @@ export const getOrderById = async (req, res) => {
     return res.status(200).json(order);
   } catch (error) {
     console.error('Get order by id error:', error);
-    return res
-      .status(500)
-      .json({ message: 'Failed to get order. Please try again.' });
+    return res.status(500).json({ message: 'Failed to get order. Please try again.' });
   }
 };
 
@@ -592,9 +551,7 @@ export const sendDeliveryOtp = async (req, res) => {
     });
   } catch (error) {
     console.error('Delivery OTP error:', error);
-    return res
-      .status(500)
-      .json({ message: 'Failed to send delivery OTP. Please try again.' });
+    return res.status(500).json({ message: 'Failed to send delivery OTP. Please try again.' });
   }
 };
 
@@ -630,9 +587,7 @@ export const verifyDeliveryOtp = async (req, res) => {
 
     const io = req.app.get('io');
     if (io) {
-      const owner = order.shopOrders.find(
-        (so) => so._id.toString() === shopOrderId,
-      )?.owner;
+      const owner = order.shopOrders.find((so) => so._id.toString() === shopOrderId)?.owner;
       if (owner?.socketId) {
         io.to(owner.socketId).emit('orderDelivered', {
           orderId: order._id,
@@ -658,9 +613,7 @@ export const verifyDeliveryOtp = async (req, res) => {
     });
   } catch (error) {
     console.error('Verify delivery OTP error:', error);
-    return res
-      .status(500)
-      .json({ message: 'Failed to verify OTP. Please try again.' });
+    return res.status(500).json({ message: 'Failed to verify OTP. Please try again.' });
   }
 };
 
@@ -708,9 +661,7 @@ export const getTodayDeliveries = async (req, res) => {
     return res.status(200).json(formattedStats);
   } catch (error) {
     console.error('Today deliveries error:', error);
-    return res
-      .status(500)
-      .json({ message: 'Failed to get deliveries. Please try again.' });
+    return res.status(500).json({ message: 'Failed to get deliveries. Please try again.' });
   }
 };
 
@@ -724,14 +675,10 @@ export const deleteOrder = async (req, res) => {
     }
 
     if (order.user.toString() !== req.userId) {
-      return res
-        .status(403)
-        .json({ message: 'Not authorized to delete this order' });
+      return res.status(403).json({ message: 'Not authorized to delete this order' });
     }
 
-    const canDelete = order.shopOrders.every(
-      (shopOrder) => shopOrder.status === 'pending',
-    );
+    const canDelete = order.shopOrders.every((shopOrder) => shopOrder.status === 'pending');
 
     if (!canDelete) {
       return res.status(400).json({
@@ -743,9 +690,7 @@ export const deleteOrder = async (req, res) => {
     return res.status(200).json({ message: 'Order deleted successfully' });
   } catch (error) {
     console.error('Delete order error:', error);
-    return res
-      .status(500)
-      .json({ message: 'Failed to delete order. Please try again.' });
+    return res.status(500).json({ message: 'Failed to delete order. Please try again.' });
   }
 };
 
@@ -753,9 +698,7 @@ export const cancelOrder = async (req, res) => {
   try {
     const { orderId, shopOrderId, reason } = req.body;
 
-    const order = await Order.findById(orderId)
-      .populate('user')
-      .populate('shopOrders.owner');
+    const order = await Order.findById(orderId).populate('user').populate('shopOrders.owner');
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
@@ -800,9 +743,7 @@ export const cancelOrder = async (req, res) => {
     return res.status(200).json({ message: 'Order cancelled successfully' });
   } catch (error) {
     console.error('Cancel order error:', error);
-    return res
-      .status(500)
-      .json({ message: 'Failed to cancel order. Please try again.' });
+    return res.status(500).json({ message: 'Failed to cancel order. Please try again.' });
   }
 };
 
@@ -812,9 +753,7 @@ export const rateOrder = async (req, res) => {
     const { rating, review } = req.body;
 
     if (!rating || rating < 1 || rating > 5) {
-      return res
-        .status(400)
-        .json({ message: 'Rating must be between 1 and 5' });
+      return res.status(400).json({ message: 'Rating must be between 1 and 5' });
     }
 
     const order = await Order.findById(orderId);
@@ -824,14 +763,10 @@ export const rateOrder = async (req, res) => {
     }
 
     if (order.user.toString() !== req.userId) {
-      return res
-        .status(403)
-        .json({ message: 'Not authorized to rate this order' });
+      return res.status(403).json({ message: 'Not authorized to rate this order' });
     }
 
-    const allDelivered = order.shopOrders.every(
-      (shopOrder) => shopOrder.status === 'delivered',
-    );
+    const allDelivered = order.shopOrders.every((shopOrder) => shopOrder.status === 'delivered');
 
     if (!allDelivered) {
       return res.status(400).json({
@@ -853,18 +788,14 @@ export const rateOrder = async (req, res) => {
     });
   } catch (error) {
     console.error('Rate order error:', error);
-    return res
-      .status(500)
-      .json({ message: 'Failed to rate order. Please try again.' });
+    return res.status(500).json({ message: 'Failed to rate order. Please try again.' });
   }
 };
 
 export const createStripePaymentIntent = async (req, res) => {
   try {
     if (!stripe) {
-      return res
-        .status(400)
-        .json({ message: 'Stripe not configured. Please use COD.' });
+      return res.status(400).json({ message: 'Stripe not configured. Please use COD.' });
     }
 
     const { amount, orderId } = req.body;
@@ -907,9 +838,7 @@ export const createStripePaymentIntent = async (req, res) => {
     });
   } catch (error) {
     console.error('Stripe payment error:', error);
-    return res
-      .status(500)
-      .json({ message: 'Payment failed. Please try again.' });
+    return res.status(500).json({ message: 'Payment failed. Please try again.' });
   }
 };
 
@@ -968,9 +897,7 @@ export const verifyStripePayment = async (req, res) => {
         }
       });
 
-      console.log(
-        'Payment Verified. Waiting for Owner to Accept before assigning delivery boys.',
-      );
+      console.log('Payment Verified. Waiting for Owner to Accept before assigning delivery boys.');
     } else {
       console.error('Socket.IO not available!');
     }
@@ -978,8 +905,6 @@ export const verifyStripePayment = async (req, res) => {
     return res.status(200).json(order);
   } catch (error) {
     console.error('Verify stripe payment error:', error);
-    return res
-      .status(500)
-      .json({ message: 'Payment verification failed. Please try again.' });
+    return res.status(500).json({ message: 'Payment verification failed. Please try again.' });
   }
 };

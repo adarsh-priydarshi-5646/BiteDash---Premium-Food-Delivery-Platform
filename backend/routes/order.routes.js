@@ -44,12 +44,7 @@ orderRouter.get('/accept-order/:assignmentId', isAuth, acceptOrder);
 orderRouter.delete('/delete-order/:orderId', isAuth, deleteOrder);
 orderRouter.post('/rate-order/:orderId', isAuth, rateOrder);
 
-orderRouter.post(
-  '/create-stripe-payment',
-  isAuth,
-  orderRateLimiter,
-  createStripePaymentIntent,
-);
+orderRouter.post('/create-stripe-payment', isAuth, orderRateLimiter, createStripePaymentIntent);
 orderRouter.post('/verify-stripe-payment', isAuth, verifyStripePayment);
 
 export default orderRouter;

@@ -69,9 +69,7 @@ function AddressModal({ onClose, addressToEdit }) {
         ...prev,
         city: data.city || '',
         state: data.state || '',
-        area: data.street
-          ? `${data.street}, ${data.suburb}`
-          : data.address || '',
+        area: data.street ? `${data.street}, ${data.suburb}` : data.address || '',
         flatNo: data.house_number || prev.flatNo,
         pincode: data.postcode || '',
         lat: data.lat || null,
@@ -111,7 +109,7 @@ function AddressModal({ onClose, addressToEdit }) {
             addressId: addressToEdit._id,
             updatedAddress: formData,
           },
-          { withCredentials: true },
+          { withCredentials: true }
         );
       } else {
         response = await axios.post(
@@ -119,7 +117,7 @@ function AddressModal({ onClose, addressToEdit }) {
           {
             address: formData,
           },
-          { withCredentials: true },
+          { withCredentials: true }
         );
       }
 
@@ -189,9 +187,7 @@ function AddressModal({ onClose, addressToEdit }) {
             )}
             <FaCompass className={detecting ? 'animate-spin' : ''} size={18} />
             <span className="relative z-10">
-              {detecting
-                ? 'Detecting exact location...'
-                : 'Detect Current Location'}
+              {detecting ? 'Detecting exact location...' : 'Detect Current Location'}
             </span>
           </button>
 
@@ -243,9 +239,7 @@ function AddressModal({ onClose, addressToEdit }) {
                 placeholder="e.g. Flat 402, 4th Floor"
                 className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 outline-none focus:border-[#E23744] focus:ring-1 focus:ring-[#E23744] transition-all font-medium"
                 value={formData.flatNo}
-                onChange={(e) =>
-                  setFormData({ ...formData, flatNo: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, flatNo: e.target.value })}
               />
             </div>
 
@@ -258,9 +252,7 @@ function AddressModal({ onClose, addressToEdit }) {
                 placeholder="e.g. Next to HDFC Bank"
                 className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 outline-none focus:border-[#E23744] focus:ring-1 focus:ring-[#E23744] transition-all font-medium"
                 value={formData.landmark}
-                onChange={(e) =>
-                  setFormData({ ...formData, landmark: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, landmark: e.target.value })}
               />
             </div>
 
@@ -275,9 +267,7 @@ function AddressModal({ onClose, addressToEdit }) {
                   placeholder="e.g. 110001"
                   className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 outline-none focus:border-[#E23744] focus:ring-1 focus:ring-[#E23744] transition-all font-medium"
                   value={formData.pincode}
-                  onChange={(e) =>
-                    setFormData({ ...formData, pincode: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
                 />
               </div>
               <div>
@@ -290,30 +280,20 @@ function AddressModal({ onClose, addressToEdit }) {
                   placeholder="e.g. New Delhi"
                   className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 outline-none focus:border-[#E23744] focus:ring-1 focus:ring-[#E23744] transition-all font-medium"
                   value={formData.city}
-                  onChange={(e) =>
-                    setFormData({ ...formData, city: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                 />
               </div>
             </div>
           </div>
 
-          {error && (
-            <p className="text-red-500 text-sm font-medium text-center">
-              {error}
-            </p>
-          )}
+          {error && <p className="text-red-500 text-sm font-medium text-center">{error}</p>}
 
           <button
             type="submit"
             disabled={loading || detecting}
             className="w-full py-4 bg-gray-900 text-white rounded-2xl font-bold text-lg hover:bg-black transition-all shadow-xl active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
           >
-            {loading
-              ? 'Saving...'
-              : addressToEdit
-                ? 'Update Address'
-                : 'Save Address'}
+            {loading ? 'Saving...' : addressToEdit ? 'Update Address' : 'Save Address'}
           </button>
         </form>
       </motion.div>

@@ -33,10 +33,7 @@ export const sendOtpMailSendGrid = async (to, otp) => {
     };
 
     const response = await sgMail.send(msg);
-    console.log(
-      'OTP email sent successfully via SendGrid:',
-      response[0].statusCode,
-    );
+    console.log('OTP email sent successfully via SendGrid:', response[0].statusCode);
     return response;
   } catch (error) {
     console.error('SendGrid error:', error.response?.body || error.message);
@@ -67,10 +64,7 @@ export const sendDeliveryOtpMailSendGrid = async (user, otp) => {
     };
 
     const response = await sgMail.send(msg);
-    console.log(
-      'Delivery OTP email sent successfully via SendGrid:',
-      response[0].statusCode,
-    );
+    console.log('Delivery OTP email sent successfully via SendGrid:', response[0].statusCode);
     return response;
   } catch (error) {
     console.error('SendGrid error:', error.response?.body || error.message);

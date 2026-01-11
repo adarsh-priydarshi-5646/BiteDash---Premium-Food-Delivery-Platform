@@ -88,13 +88,9 @@ function Profile() {
     e.preventDefault();
     setIsUpdating(true);
     try {
-      const { data } = await axios.put(
-        `${serverUrl}/api/user/update-profile`,
-        profileForm,
-        {
-          withCredentials: true,
-        },
-      );
+      const { data } = await axios.put(`${serverUrl}/api/user/update-profile`, profileForm, {
+        withCredentials: true,
+      });
       dispatch(setUserData(data.user));
       setIsEditingProfile(false);
       toast.success('Profile updated successfully');
@@ -107,12 +103,9 @@ function Profile() {
 
   const handleDeleteAddress = async (addressId) => {
     try {
-      const { data } = await axios.delete(
-        `${serverUrl}/api/user/remove-address/${addressId}`,
-        {
-          withCredentials: true,
-        },
-      );
+      const { data } = await axios.delete(`${serverUrl}/api/user/remove-address/${addressId}`, {
+        withCredentials: true,
+      });
       dispatch(setUserData(data.user));
       toast.success('Address removed successfully');
     } catch (error) {
@@ -131,7 +124,7 @@ function Profile() {
         },
         {
           withCredentials: true,
-        },
+        }
       );
       dispatch(setUserData(data.user));
       toast.success('Default address updated');
@@ -199,13 +192,10 @@ function Profile() {
                     <p className="text-gray-500 font-bold flex items-center justify-center md:justify-start gap-2 text-xs uppercase tracking-wide">
                       <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
                       Member Since{' '}
-                      {new Date(userData?.createdAt).toLocaleDateString(
-                        'en-US',
-                        {
-                          month: 'long',
-                          year: 'numeric',
-                        },
-                      )}
+                      {new Date(userData?.createdAt).toLocaleDateString('en-US', {
+                        month: 'long',
+                        year: 'numeric',
+                      })}
                     </p>
                   </div>
                   <button
@@ -227,9 +217,7 @@ function Profile() {
                   <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest">
                     Email Address
                   </p>
-                  <p className="text-gray-700 font-bold text-sm">
-                    {userData?.email}
-                  </p>
+                  <p className="text-gray-700 font-bold text-sm">{userData?.email}</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 bg-gray-50/50 p-5 rounded-2xl border border-gray-100/50 transition-all hover:bg-white hover:shadow-md group">
@@ -262,9 +250,7 @@ function Profile() {
                 >
                   {stat.icon}
                 </div>
-                <p className="text-2xl font-black text-gray-900">
-                  {stat.value}
-                </p>
+                <p className="text-2xl font-black text-gray-900">{stat.value}</p>
                 <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">
                   {stat.label}
                 </p>
@@ -310,9 +296,7 @@ function Profile() {
                   <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm text-gray-300">
                     <FaMapMarkerAlt size={24} />
                   </div>
-                  <p className="text-gray-800 font-bold">
-                    No saved addresses yet
-                  </p>
+                  <p className="text-gray-800 font-bold">No saved addresses yet</p>
                   <p className="text-gray-400 text-xs mt-1 px-8">
                     Add your home or office address for faster checkout
                   </p>
@@ -353,9 +337,7 @@ function Profile() {
                       </div>
                     </div>
 
-                    <h3 className="text-gray-900 font-black text-xl mb-1">
-                      {address.flatNo}
-                    </h3>
+                    <h3 className="text-gray-900 font-black text-xl mb-1">{address.flatNo}</h3>
                     <p className="text-gray-500 font-medium leading-relaxed mb-5 text-sm">
                       {address.area}
                       {address.landmark && ` • ${address.landmark}`}
@@ -391,22 +373,18 @@ function Profile() {
                 Security & Privacy
               </h3>
               <div className="space-y-4">
-                {['Change Password', 'Two-Factor Auth', 'Privacy Settings'].map(
-                  (action, i) => (
-                    <button
-                      key={i}
-                      className="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-gray-50 transition-all group border border-transparent hover:border-gray-50"
-                    >
-                      <span className="text-gray-700 font-bold text-sm">
-                        {action}
-                      </span>
-                      <FaChevronRight
-                        className="text-gray-300 group-hover:text-gray-900 transition-colors"
-                        size={12}
-                      />
-                    </button>
-                  ),
-                )}
+                {['Change Password', 'Two-Factor Auth', 'Privacy Settings'].map((action, i) => (
+                  <button
+                    key={i}
+                    className="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-gray-50 transition-all group border border-transparent hover:border-gray-50"
+                  >
+                    <span className="text-gray-700 font-bold text-sm">{action}</span>
+                    <FaChevronRight
+                      className="text-gray-300 group-hover:text-gray-900 transition-colors"
+                      size={12}
+                    />
+                  </button>
+                ))}
               </div>
             </motion.div>
 
@@ -422,21 +400,17 @@ function Profile() {
                 Notifications
               </h3>
               <div className="space-y-4">
-                {['Order Updates', 'Promotions', 'Account Alerts'].map(
-                  (action, i) => (
-                    <div
-                      key={i}
-                      className="flex items-center justify-between p-4 bg-gray-50/50 rounded-2xl"
-                    >
-                      <span className="text-gray-700 font-bold text-sm">
-                        {action}
-                      </span>
-                      <div className="w-10 h-6 bg-[#E23744] rounded-full relative p-1 cursor-pointer">
-                        <div className="w-4 h-4 bg-white rounded-full ml-auto" />
-                      </div>
+                {['Order Updates', 'Promotions', 'Account Alerts'].map((action, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center justify-between p-4 bg-gray-50/50 rounded-2xl"
+                  >
+                    <span className="text-gray-700 font-bold text-sm">{action}</span>
+                    <div className="w-10 h-6 bg-[#E23744] rounded-full relative p-1 cursor-pointer">
+                      <div className="w-4 h-4 bg-white rounded-full ml-auto" />
                     </div>
-                  ),
-                )}
+                  </div>
+                ))}
               </div>
             </motion.div>
           </div>
@@ -496,14 +470,9 @@ function Profile() {
               >
                 <div className="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-bl-full -mr-16 -mt-16 opacity-50" />
 
-                <h2 className="text-2xl font-black text-gray-900 mb-6">
-                  Edit Profile
-                </h2>
+                <h2 className="text-2xl font-black text-gray-900 mb-6">Edit Profile</h2>
 
-                <form
-                  onSubmit={handleUpdateProfile}
-                  className="space-y-5 relative z-10"
-                >
+                <form onSubmit={handleUpdateProfile} className="space-y-5 relative z-10">
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">
                       Full Name
@@ -512,12 +481,7 @@ function Profile() {
                       type="text"
                       required
                       value={profileForm.fullName}
-                      onChange={(e) =>
-                        setProfileForm({
-                          ...profileForm,
-                          fullName: e.target.value,
-                        })
-                      }
+                      onChange={(e) => setProfileForm({ ...profileForm, fullName: e.target.value })}
                       className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 outline-none focus:border-[#E23744] focus:ring-1 focus:ring-[#E23744] transition-all font-bold"
                     />
                   </div>
@@ -530,12 +494,7 @@ function Profile() {
                       type="email"
                       required
                       value={profileForm.email}
-                      onChange={(e) =>
-                        setProfileForm({
-                          ...profileForm,
-                          email: e.target.value,
-                        })
-                      }
+                      onChange={(e) => setProfileForm({ ...profileForm, email: e.target.value })}
                       className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 outline-none focus:border-[#E23744] focus:ring-1 focus:ring-[#E23744] transition-all font-bold"
                     />
                   </div>
@@ -548,12 +507,7 @@ function Profile() {
                       type="tel"
                       required
                       value={profileForm.mobile}
-                      onChange={(e) =>
-                        setProfileForm({
-                          ...profileForm,
-                          mobile: e.target.value,
-                        })
-                      }
+                      onChange={(e) => setProfileForm({ ...profileForm, mobile: e.target.value })}
                       className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 outline-none focus:border-[#E23744] focus:ring-1 focus:ring-[#E23744] transition-all font-bold"
                     />
                   </div>
