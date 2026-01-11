@@ -6,9 +6,9 @@
  * Protected routes require JWT auth, search supports query + city filtering
  */
 import express from "express";
-import isAuth from "../middlewares/auth.middleware.js";
+import isAuth from "../middlewares/isAuth.js";
 import { cacheMiddleware } from "../config/cache.js";
-import { searchRateLimiter } from "../middlewares/rateLimit.middleware.js";
+import { searchRateLimiter } from "../middlewares/rateLimiter.js";
 import {
   addItem,
   deleteItem,
@@ -19,7 +19,7 @@ import {
   rating,
   searchItems,
 } from "../controllers/item.controllers.js";
-import { upload } from "../middlewares/upload.middleware.js";
+import { upload } from "../middlewares/multer.js";
 
 const itemRouter = express.Router();
 
