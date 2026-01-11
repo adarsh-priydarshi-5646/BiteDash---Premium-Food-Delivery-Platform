@@ -1,3 +1,6 @@
+/**
+ * Delivery Assignment Model - Broadcasts orders to nearby delivery boys
+ */
 import mongoose from "mongoose";
 
 const deliveryAssignmentSchema = new mongoose.Schema(

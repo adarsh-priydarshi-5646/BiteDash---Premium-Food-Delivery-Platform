@@ -1,3 +1,6 @@
+/**
+ * Profile Page - User profile, addresses, stats & settings management
+ */
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Nav from "../components/Nav";

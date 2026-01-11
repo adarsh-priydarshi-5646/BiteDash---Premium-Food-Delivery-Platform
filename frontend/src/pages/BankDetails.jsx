@@ -1,3 +1,6 @@
+/**
+ * Bank Details Page - Owner payout settings & earnings dashboard
+ */
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";

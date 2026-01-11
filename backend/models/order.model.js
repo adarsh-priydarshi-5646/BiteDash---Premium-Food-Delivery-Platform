@@ -1,3 +1,6 @@
+/**
+ * Order Model - Multi-shop orders with delivery tracking & payment status
+ */
 import mongoose from "mongoose";
 
 const shopOrderItemSchema = new mongoose.Schema(

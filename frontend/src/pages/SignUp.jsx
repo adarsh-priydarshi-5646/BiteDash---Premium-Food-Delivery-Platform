@@ -1,3 +1,6 @@
+/**
+ * Sign Up Page - User registration with role selection
+ */
 import React from "react";
 import { useState } from "react";
 import { FaRegEye } from "react-icons/fa";

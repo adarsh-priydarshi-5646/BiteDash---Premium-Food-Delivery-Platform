@@ -1,3 +1,6 @@
+/**
+ * SendGrid Email Service - OTP delivery for auth & order verification
+ */
 import sgMail from '@sendgrid/mail';
 import dotenv from 'dotenv';
 dotenv.config();

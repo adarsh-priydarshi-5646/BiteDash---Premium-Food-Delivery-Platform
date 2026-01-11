@@ -1,3 +1,6 @@
+/**
+ * Auth Routes - Authentication endpoints with rate limiting
+ */
 import express from "express";
 import { authRateLimiter } from "../middlewares/rateLimiter.js";
 import {

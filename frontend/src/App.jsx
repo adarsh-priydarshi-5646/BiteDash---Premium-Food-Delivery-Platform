@@ -1,3 +1,6 @@
+/**
+ * App Component - Main application entry with routing & socket initialization
+ */
 import React, { useEffect, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import useGetCurrentUser from "./hooks/useGetCurrentUser";

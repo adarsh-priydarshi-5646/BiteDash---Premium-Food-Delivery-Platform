@@ -1,3 +1,6 @@
+/**
+ * Landing Page - Public homepage with hero, collections & trending items
+ */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { serverUrl } from "../App";

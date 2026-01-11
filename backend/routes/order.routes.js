@@ -1,3 +1,6 @@
+/**
+ * Order Routes - Order lifecycle, delivery & payment endpoints
+ */
 import express from "express";
 import isAuth from "../middlewares/isAuth.js";
 import { orderRateLimiter } from "../middlewares/rateLimiter.js";

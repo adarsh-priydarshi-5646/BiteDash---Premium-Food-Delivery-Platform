@@ -1,3 +1,6 @@
+/**
+ * Hook: Fetch current authenticated user on app load
+ */
 import axios from "axios";
 import React, { useEffect } from "react";
 import { serverUrl } from "../App";

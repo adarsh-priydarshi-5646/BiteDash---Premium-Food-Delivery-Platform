@@ -1,3 +1,6 @@
+/**
+ * FoodCard Component - Displays food item with add-to-cart functionality
+ */
 import React, { memo } from "react";
 import { FaStar } from "react-icons/fa";
 import { FaMinus, FaPlus } from "react-icons/fa";

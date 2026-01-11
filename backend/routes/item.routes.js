@@ -1,3 +1,6 @@
+/**
+ * Item Routes - Food item CRUD with caching & search
+ */
 import express from "express";
 import isAuth from "../middlewares/isAuth.js";
 import { cacheMiddleware } from "../config/cache.js";

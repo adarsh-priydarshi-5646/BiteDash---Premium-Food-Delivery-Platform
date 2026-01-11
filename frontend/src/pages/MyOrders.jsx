@@ -1,3 +1,6 @@
+/**
+ * My Orders Page - Role-based order history with real-time Socket.IO updates
+ */
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IoIosArrowRoundBack } from "react-icons/io";

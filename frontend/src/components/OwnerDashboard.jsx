@@ -1,3 +1,6 @@
+/**
+ * OwnerDashboard Component - Restaurant owner's control panel for menu & orders
+ */
 import React, { useState, useEffect } from "react";
 import Nav from "./Nav";
 import { useSelector, useDispatch } from "react-redux";

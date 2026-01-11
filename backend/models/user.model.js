@@ -1,3 +1,6 @@
+/**
+ * User Model - Supports user/owner/deliveryBoy roles with geospatial indexing
+ */
 import mongoose from "mongoose";
 import { type } from "os";
 

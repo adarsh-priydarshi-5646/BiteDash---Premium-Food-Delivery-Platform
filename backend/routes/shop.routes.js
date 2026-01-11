@@ -1,3 +1,6 @@
+/**
+ * Shop Routes - Restaurant CRUD with city-based caching
+ */
 import express from "express";
 import {
   createEditShop,

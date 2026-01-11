@@ -1,3 +1,6 @@
+/**
+ * Gzip Compression - Compresses responses > 1KB
+ */
 import zlib from 'zlib';
 
 export const compressionMiddleware = (req, res, next) => {

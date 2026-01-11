@@ -1,3 +1,6 @@
+/**
+ * Stripe Config - Payment gateway initialization
+ */
 import Stripe from "stripe";
 import dotenv from "dotenv";
 

@@ -1,3 +1,6 @@
+/**
+ * FilterSidebar Component - Category, price & sort filters for food listing
+ */
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleCategory, setPriceRange, setSortBy, toggleQuickFilter, clearFilters } from "../redux/userSlice";

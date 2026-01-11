@@ -1,3 +1,6 @@
+/**
+ * Item Model - Food item with category, pricing & ratings
+ */
 import mongoose from "mongoose";
 
 const itemSchema = new mongoose.Schema(

@@ -1,3 +1,6 @@
+/**
+ * Sign In Page - Email/password & Google OAuth login
+ */
 import React from "react";
 import { useState } from "react";
 import { FaRegEye } from "react-icons/fa";

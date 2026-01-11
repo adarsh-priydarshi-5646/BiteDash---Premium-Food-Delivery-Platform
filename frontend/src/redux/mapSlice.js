@@ -1,3 +1,6 @@
+/**
+ * Map Redux Slice - Location & address state management
+ */
 import { createSlice } from "@reduxjs/toolkit";
 
 const mapSlice = createSlice({

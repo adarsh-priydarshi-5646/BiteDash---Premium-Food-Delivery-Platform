@@ -1,3 +1,6 @@
+/**
+ * Create/Edit Shop Page - Restaurant profile management for owners
+ */
 import React, { useState } from "react";
 import { IoIosArrowRoundBack, IoMdCloudUpload } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";

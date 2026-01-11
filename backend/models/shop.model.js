@@ -1,3 +1,6 @@
+/**
+ * Shop Model - Restaurant with owner reference & menu items
+ */
 import mongoose from "mongoose";
 
 const shopSchema = new mongoose.Schema(

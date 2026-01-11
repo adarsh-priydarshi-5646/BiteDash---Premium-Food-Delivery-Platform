@@ -1,3 +1,6 @@
+/**
+ * Order Placed Page - Success screen with Stripe payment verification
+ */
 import React, { useEffect, useState } from "react";
 import { FaCircleCheck } from "react-icons/fa6";
 import { FaBox } from "react-icons/fa";

@@ -1,3 +1,6 @@
+/**
+ * Multer Config - File upload to /public directory
+ */
 import multer from "multer";
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {

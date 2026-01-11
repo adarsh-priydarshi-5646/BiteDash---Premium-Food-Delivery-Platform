@@ -1,3 +1,6 @@
+/**
+ * User Routes - Profile, addresses & bank details management
+ */
 import express from "express";
 import {
   getCurrentUser,

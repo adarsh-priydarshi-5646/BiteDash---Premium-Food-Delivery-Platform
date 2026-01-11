@@ -1,3 +1,6 @@
+/**
+ * Add Item Page - Owner form to add new menu items with live preview
+ */
 import React, { useState, useRef } from "react";
 import { IoIosArrowRoundBack, IoMdCloudUpload } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";

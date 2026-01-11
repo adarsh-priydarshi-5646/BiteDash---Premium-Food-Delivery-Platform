@@ -1,3 +1,6 @@
+/**
+ * Footer Component - Site-wide footer with links & contact info
+ */
 import React from 'react';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaEnvelope, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';

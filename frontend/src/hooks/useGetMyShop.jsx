@@ -1,3 +1,6 @@
+/**
+ * Hook: Fetch owner's restaurant data
+ */
 import axios from "axios";
 import React, { useEffect } from "react";
 import { serverUrl } from "../App";

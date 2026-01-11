@@ -1,3 +1,6 @@
+/**
+ * Forgot Password - 3-step OTP-based password reset flow
+ */
 import axios from "axios";
 import React, { useState } from "react";
 import { IoIosArrowRoundBack } from "react-icons/io";

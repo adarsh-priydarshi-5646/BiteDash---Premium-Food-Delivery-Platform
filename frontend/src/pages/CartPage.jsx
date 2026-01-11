@@ -1,3 +1,6 @@
+/**
+ * Cart Page - Shopping cart with bill breakdown
+ */
 import React from "react";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { FaShoppingCart, FaReceipt } from "react-icons/fa";

@@ -1,3 +1,6 @@
+/**
+ * Documentation Page - Technical docs viewer with markdown rendering
+ */
 import React, { useState, useEffect, useMemo } from "react";
 import { marked } from "marked";
 import { FaChevronRight, FaBars, FaTimes } from "react-icons/fa";

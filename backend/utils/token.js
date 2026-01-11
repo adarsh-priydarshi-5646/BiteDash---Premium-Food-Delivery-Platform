@@ -1,3 +1,6 @@
+/**
+ * JWT Token Generator - 7-day expiry tokens
+ */
 import jwt from "jsonwebtoken";
 
 const genToken = async (userId) => {

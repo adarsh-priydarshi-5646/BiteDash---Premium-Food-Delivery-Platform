@@ -1,3 +1,6 @@
+/**
+ * Owner Redux Slice - Restaurant owner's shop data state management
+ */
 import { createSlice } from "@reduxjs/toolkit";
 
 const ownerSlice = createSlice({
