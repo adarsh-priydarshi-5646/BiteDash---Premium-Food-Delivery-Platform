@@ -14,9 +14,9 @@ import {
   FaLocationDot,
   FaStar,
   FaClock,
+  FaArrowLeft,
 } from 'react-icons/fa6';
 import FoodCard from '../components/FoodCard';
-import Nav from '../components/Nav';
 
 function Shop() {
   const { shopId } = useParams();
@@ -45,7 +45,14 @@ function Shop() {
 
   return (
     <div className="min-h-screen bg-[#F8F8F8]">
-      <Nav />
+      {}
+      <button
+        className="fixed top-6 left-6 z-30 flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-900 px-4 py-2.5 rounded-full shadow-lg transition-all hover:shadow-xl border border-gray-200"
+        onClick={() => navigate('/')}
+      >
+        <FaArrowLeft className="text-[#E23744]" />
+        <span className="font-semibold">Back</span>
+      </button>
 
       {}
       {shop && (
