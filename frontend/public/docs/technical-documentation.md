@@ -1,4 +1,4 @@
-# BiteDash - Technical Documentation
+# 🍔 BiteDash - Technical Documentation
 
 <div align="center">
 
@@ -15,37 +15,7 @@
 
 ---
 
-### Welcome to BiteDash
-
-BiteDash is a **production-ready, full-stack food delivery platform** designed and developed to showcase modern web development practices. This project demonstrates how to build a scalable, secure, and feature-rich application using the MERN stack (MongoDB, Express.js, React, Node.js).
-
-### Why BiteDash Was Built
-
-This project was created to:
-
-- **Demonstrate Full-Stack Expertise**: Showcase end-to-end development skills from database design to frontend UI
-- **Implement Real-World Features**: Build features that actual food delivery apps use (real-time tracking, payments, multi-role auth)
-- **Follow Industry Best Practices**: Apply security measures, testing, CI/CD, and clean code principles
-- **Create Portfolio Project**: Serve as a comprehensive portfolio piece for job applications
-
-### What Makes BiteDash Special
-
-- **Complete Solution**: Not just a demo - it's a fully functional platform with 17+ pages and 30+ API endpoints
-- **Real-Time Features**: Live order tracking with Socket.IO, instant notifications
-- **Multi-Role System**: Separate dashboards for customers, restaurant owners, and delivery partners
-- **Production Deployed**: Live on Vercel (frontend) and Render (backend)
-- **Well Documented**: Comprehensive documentation for every component and API
-- **Tested**: 62+ passing tests with Vitest
-
-### Live Demo
-
-- **Frontend**: [https://bitedash-food.vercel.app](https://bitedash-food.vercel.app)
-- **Backend API**: [https://food-delivery-full-stack-app-3.onrender.com](https://food-delivery-full-stack-app-3.onrender.com)
-- **GitHub**: [https://github.com/adarsh-priydarshi-5646/Food-Delivery-Full-Stack-App](https://github.com/adarsh-priydarshi-5646/Food-Delivery-Full-Stack-App)
-
----
-
-## Table of Contents
+## 📋 Table of Contents
 
 1. [Overview](#-overview)
 2. [Architecture](#-architecture)
@@ -60,7 +30,7 @@ This project was created to:
 
 ---
 
-## Overview
+## 🎯 Overview
 
 ### What is BiteDash?
 
@@ -105,7 +75,7 @@ BiteDash is a **hyper-local food delivery ecosystem** that connects restaurants 
 
 ---
 
-## Architecture
+## 🏗 Architecture
 
 ### System Design
 
@@ -149,7 +119,7 @@ BiteDash is a **hyper-local food delivery ecosystem** that connects restaurants 
 
 ---
 
-## Frontend Guide
+## 💻 Frontend Guide
 
 ### Project Structure
 
@@ -335,7 +305,7 @@ dispatch(addToCart(item));
 
 ---
 
-## Backend Guide
+## ⚙️ Backend Guide
 
 ### Project Structure
 
@@ -419,7 +389,7 @@ Request → Rate Limiter → Security Headers → Auth Check → Validation → 
 
 ---
 
-## Database Models
+## 📊 Database Models
 
 ### User Model
 
@@ -526,7 +496,7 @@ Request → Rate Limiter → Security Headers → Auth Check → Validation → 
 
 ---
 
-## API Reference
+## 📡 API Reference
 
 ### Authentication APIs
 
@@ -592,7 +562,7 @@ Request → Rate Limiter → Security Headers → Auth Check → Validation → 
 
 ---
 
-## Real-Time Events
+## 🔌 Real-Time Events
 
 ### Socket.IO Architecture
 
@@ -624,7 +594,7 @@ Request → Rate Limiter → Security Headers → Auth Check → Validation → 
 
 ---
 
-## State Management
+## 🗄 State Management
 
 ### Redux Store Structure
 
@@ -685,7 +655,7 @@ setSortBy(option)
 
 ---
 
-## Performance
+## ⚡ Performance
 
 ### Optimization Techniques
 
@@ -714,7 +684,7 @@ dist/
 
 ---
 
-## Deployment
+## 🚀 Deployment
 
 ### Frontend (Vercel)
 
@@ -773,7 +743,7 @@ items.createIndex({ shop: 1 })
 
 ---
 
-## Summary
+## 📈 Summary
 
 | Metric | Value |
 |:-------|:------|
