@@ -80,6 +80,8 @@ jobs:
     name: Deploy
     needs: build
     runs-on: ubuntu-latest
+    outputs:
+      deployment-url: ${{ steps.deploy-step.outputs.url }}
     steps:
       - uses: actions/checkout@v6
 
@@ -87,10 +89,45 @@ jobs:
         run: npm i -g vercel@latest
 
       - name: Deploy to Vercel
+        id: deploy-step
         run: |
+          echo "🚀 Starting deployment..."
           vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
           vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+          DEPLOYMENT_URL=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
+          echo "✅ Deployed to: $DEPLOYMENT_URL"
+
+      - name: Verify Deployment
+        run: |
+          echo "🔍 Verifying deployment health..."
+          DEPLOYMENT_URL="${{ steps.deploy-step.outputs.url }}"
+          
+          # Wait for deployment to be ready
+          sleep 10
+          
+          # Check if deployment is accessible
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$DEPLOYMENT_URL" || echo "000")
+          
+          if [ "$HTTP_CODE" -eq 200 ] || [ "$HTTP_CODE" -eq 304 ]; then
+            echo "✅ Deployment is healthy (HTTP $HTTP_CODE)"
+          else
+            echo "❌ Deployment verification failed (HTTP $HTTP_CODE)"
+            echo "URL: $DEPLOYMENT_URL"
+            exit 1
+          fi
+          
+          # Check if critical assets are loading
+          echo "🔍 Checking critical assets..."
+          ASSETS_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$DEPLOYMENT_URL/assets/" || echo "000")
+          
+          if [ "$ASSETS_CODE" -eq 200 ] || [ "$ASSETS_CODE" -eq 403 ] || [ "$ASSETS_CODE" -eq 404 ]; then
+            echo "✅ Assets directory accessible"
+          else
+            echo "⚠️ Assets check returned HTTP $ASSETS_CODE (non-critical)"
+          fi
+          
+          echo "✅ Deployment verification complete"
 
   release:
     name: Release
@@ -119,4 +156,154 @@ jobs:
               console.log('✅ Release:', tag);
             } catch (e) {
               console.log('Skipped:', e.message);
+            }
+
+  # ===========================================================================
+  # AUTO-ROLLBACK (If any job fails after merge)
+  # ===========================================================================
+  rollback:
+    name: Auto Rollback
+    needs: [test, build, deploy, release]
+    runs-on: ubuntu-latest
+    if: failure() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Rollback to Previous Commit
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const currentSha = context.sha;
+            const currentShortSha = currentSha.substring(0, 7);
+            
+            console.log('🚨 DEPLOYMENT FAILED - Initiating Rollback');
+            console.log('Failed commit:', currentShortSha);
+            
+            // Get commit details
+            const { data: commit } = await github.rest.repos.getCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: currentSha
+            });
+            
+            const commitMessage = commit.commit.message;
+            const commitAuthor = commit.commit.author.name;
+            
+            // Get previous commit
+            const { data: commits } = await github.rest.repos.listCommits({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: 'main',
+              per_page: 2
+            });
+            
+            if (commits.length < 2) {
+              console.log('⚠️ No previous commit to rollback to');
+              return;
+            }
+            
+            const previousCommit = commits[1];
+            const previousSha = previousCommit.sha;
+            const previousShortSha = previousSha.substring(0, 7);
+            
+            console.log('Rolling back to:', previousShortSha);
+            
+            // Determine which job failed
+            let failureReason = 'Unknown';
+            const jobResults = {
+              test: '${{ needs.test.result }}',
+              build: '${{ needs.build.result }}',
+              deploy: '${{ needs.deploy.result }}',
+              release: '${{ needs.release.result }}'
+            };
+            
+            const failedJobs = [];
+            for (const [job, result] of Object.entries(jobResults)) {
+              if (result === 'failure') {
+                failedJobs.push(job);
+              }
+            }
+            
+            if (failedJobs.length > 0) {
+              failureReason = failedJobs.join(', ');
+            }
+            
+            // Create rollback commit message
+            const rollbackMessage = `🔄 Auto-Rollback: Revert failed deployment
+
+⚠️ AUTOMATIC ROLLBACK PERFORMED
+
+Failed Commit: ${currentShortSha}
+Failed Jobs: ${failureReason}
+Original Message: "${commitMessage}"
+Original Author: ${commitAuthor}
+
+Rolled back to: ${previousShortSha}
+
+This commit was automatically reverted because deployment checks failed after merge.
+Please fix the issues and create a new PR.
+
+---
+Workflow: ${context.workflow}
+Run: ${context.runNumber}`;
+
+            try {
+              // Force push to revert main branch
+              await github.rest.git.updateRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: 'heads/main',
+                sha: previousSha,
+                force: true
+              });
+              
+              console.log('✅ Successfully rolled back main branch');
+              
+              // Create an issue to notify about the rollback
+              const issueBody = `## 🚨 Automatic Rollback Performed
+
+**Failed Commit:** \`${currentShortSha}\`  
+**Failed Jobs:** ${failureReason}  
+**Rolled Back To:** \`${previousShortSha}\`
+
+### Original Commit Details
+- **Author:** ${commitAuthor}
+- **Message:** ${commitMessage}
+
+### Failure Details
+The following jobs failed after merge to main:
+${failedJobs.map(job => `- ❌ **${job}**`).join('\n')}
+
+### Action Required
+1. Review the [failed workflow run](${context.payload.repository.html_url}/actions/runs/${context.runId})
+2. Fix the issues locally
+3. Create a new PR with the fixes
+4. Ensure all CI/CD checks pass before merge
+
+### Rollback Information
+- **Workflow:** ${context.workflow}
+- **Run Number:** ${context.runNumber}
+- **Timestamp:** ${new Date().toISOString()}
+
+The main branch has been automatically reverted to the previous stable commit to maintain production stability.`;
+
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `🔄 Auto-Rollback: Failed deployment (${currentShortSha})`,
+                body: issueBody,
+                labels: ['rollback', 'deployment-failure', 'urgent']
+              });
+              
+              console.log('✅ Created issue to track rollback');
+              
+            } catch (error) {
+              console.error('❌ Rollback failed:', error.message);
+              throw error;
             }
